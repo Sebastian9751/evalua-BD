@@ -11,7 +11,7 @@
 
     
 
-#Obtener la lista de profesores por perido
+#Obtener la lista de profesores por periodo
 
       CALL getTeachersAverageByPeriod({periodo}) -> donde el "periodo" es el del cuatrimestre 
 
