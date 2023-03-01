@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: mysql
--- Tiempo de generación: 01-03-2023 a las 03:35:29
+-- Tiempo de generación: 01-03-2023 a las 05:58:18
 -- Versión del servidor: 8.0.32
 -- Versión de PHP: 8.1.16
 
@@ -18,8 +18,30 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `evalua-v2`
+-- Base de datos: `evalua_v2`
 --
+
+DELIMITER $$
+--
+-- Procedimientos
+--
+CREATE DEFINER=`root`@`%` PROCEDURE `getAverageByCareer` (IN `idCareer` INT(10))   BEGIN
+SELECT id_periodo, Grupo.clave_grupo,nombre_materia,nombre_carrera,nombre_corto, AVG(Respuesta.puntuacion) AS promedio_puntuacion
+FROM Encuesta 
+INNER JOIN Curso ON Encuesta.id_curso = Curso.id_curso 
+INNER JOIN Grupo ON Curso.id_grupo = Grupo.id_grupo 
+INNER JOIN Carrera ON Grupo.id_carrera = Carrera.id_carrera
+INNER JOIN Materia ON Curso.id_materia = Materia.id_materia
+INNER JOIN Respuesta ON Encuesta.id_encuesta = Respuesta.id_encuesta  
+INNER JOIN Pregunta ON Respuesta.id_pregunta = Pregunta.id_pregunta
+
+WHERE Carrera.id_carrera=  idCareer
+
+GROUP BY Grupo.clave_grupo, nombre_materia, nombre_carrera, nombre_corto, id_periodo;
+
+END$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -39,8 +61,10 @@ CREATE TABLE `Alumno` (
 --
 
 INSERT INTO `Alumno` (`matricula`, `nombre`, `apellido_materno`, `apellido_paterno`) VALUES
-(202000114, 'ALUMNO', 'A-2', 'A-2'),
-(202000115, 'ALUMNO-2', 'A-1', 'Q-2');
+(202000110, 'BIOALUM', 'ASA', 'AASS'),
+(202000111, 'INCOGNITO', 'ap1', 'ap2'),
+(202000114, 'Sebas', 's', 'sm'),
+(202000115, 'Unknow', 'unk', 'now');
 
 -- --------------------------------------------------------
 
@@ -60,9 +84,9 @@ CREATE TABLE `Carrera` (
 --
 
 INSERT INTO `Carrera` (`id_carrera`, `nombre_carrera`, `nombre_corto`, `correo_institucional`) VALUES
-(1, 'Ing.Software', 'SOTF', 'EJEMPLO@1.edu.mx'),
-(2, 'Ing.Biomedica', 'BIO', 'EJEMPLO@-2.edu.mx'),
-(3, 'Ing.Biotecnologia', 'BIOTEC', 'EJEMPLO@--3.edu.mx');
+(1, 'Ing.Software', 'SOTF', '@SOTF'),
+(2, 'Ing.Biomedica', 'BIO', '@BIO'),
+(3, 'Ing.Biotecnologia', 'BIOTEC', '@biotec');
 
 -- --------------------------------------------------------
 
@@ -80,7 +104,7 @@ CREATE TABLE `CuestionarioAlumnoDocente` (
 --
 
 INSERT INTO `CuestionarioAlumnoDocente` (`id_cuestionario_ad`, `descripcion`) VALUES
-(1, 'Cuestionario v1 2022');
+(1, 'Cuestionario  2022');
 
 -- --------------------------------------------------------
 
@@ -101,12 +125,10 @@ CREATE TABLE `Curso` (
 --
 
 INSERT INTO `Curso` (`id_curso`, `id_periodo`, `id_materia`, `id_grupo`, `id_docente`) VALUES
-(1, 3222, 1, 1, 1),
-(2, 3322, 1, 2, 2),
-(4, 3223, 1, 1, 1),
-(6, 3222, 1, 2, 1),
-(3, 3223, 2, 3, 1),
-(5, 3222, 2, 4, 2);
+(2, 3222, 1, 1, 2),
+(4, 3222, 1, 3, 1),
+(1, 3222, 2, 1, 1),
+(3, 3332, 2, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -118,6 +140,14 @@ CREATE TABLE `Curso_has_Alumno` (
   `id_curso` int NOT NULL,
   `matricula` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+--
+-- Volcado de datos para la tabla `Curso_has_Alumno`
+--
+
+INSERT INTO `Curso_has_Alumno` (`id_curso`, `matricula`) VALUES
+(1, 202000114),
+(2, 202000114);
 
 -- --------------------------------------------------------
 
@@ -138,8 +168,8 @@ CREATE TABLE `Docente` (
 --
 
 INSERT INTO `Docente` (`id_docente`, `nombre`, `apellido_materno`, `apellido_paterno`, `correo`) VALUES
-(1, 'DOCENTE ', 'PRUEBA 1', 'PRUEBA 1-1', 'EJEPLI@1.EDU.MX'),
-(2, 'DOCENTE PRUEBA 2', 'PRUEBA 2', 'PRUEBA 2-2', 'EJEPLI@1.EDU.MX');
+(1, 'DOCENTE ', 'PRUEBA 1', 'PRUEBA 1-1', '@docente 1'),
+(2, 'DOCENTE PRUEBA 2', 'PRUEBA 2', 'PRUEBA 2-2', '@docente 2');
 
 -- --------------------------------------------------------
 
@@ -159,7 +189,11 @@ CREATE TABLE `Encuesta` (
 -- Volcado de datos para la tabla `Encuesta`
 --
 
-
+INSERT INTO `Encuesta` (`id_encuesta`, `id_curso`, `matricula_alumno`, `id_cuestionario_ad`, `estatus`) VALUES
+(1, 1, 202000114, 1, 1),
+(2, 2, 202000115, 1, 1),
+(3, 3, 202000111, 1, 1),
+(4, 4, 202000110, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -180,8 +214,7 @@ CREATE TABLE `Grupo` (
 INSERT INTO `Grupo` (`id_grupo`, `clave_grupo`, `id_carrera`) VALUES
 (1, '28AV', 1),
 (2, '28BIO', 2),
-(3, '27BIOTEC', 3),
-(4, '28AV', 1);
+(3, '27BIOTEC', 3);
 
 -- --------------------------------------------------------
 
@@ -191,16 +224,17 @@ INSERT INTO `Grupo` (`id_grupo`, `clave_grupo`, `id_carrera`) VALUES
 
 CREATE TABLE `Materia` (
   `id_materia` int NOT NULL,
-  `nombre_materia` varchar(60) DEFAULT NULL
+  `nombre_materia` varchar(60) DEFAULT NULL,
+  `nombre_corto_materia` varchar(45) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
 -- Volcado de datos para la tabla `Materia`
 --
 
-INSERT INTO `Materia` (`id_materia`, `nombre_materia`) VALUES
-(1, 'Ingles I'),
-(2, 'Algebra');
+INSERT INTO `Materia` (`id_materia`, `nombre_materia`, `nombre_corto_materia`) VALUES
+(1, 'Ingles I', 'ingles'),
+(2, 'Algebra', 'AGL');
 
 -- --------------------------------------------------------
 
@@ -219,8 +253,6 @@ CREATE TABLE `Periodo` (
 
 INSERT INTO `Periodo` (`id_periodo`, `Estatus`) VALUES
 (3222, 0),
-(3223, 1),
-(3322, 0),
 (3332, 0);
 
 -- --------------------------------------------------------
@@ -239,7 +271,10 @@ CREATE TABLE `Pregunta` (
 -- Volcado de datos para la tabla `Pregunta`
 --
 
-
+INSERT INTO `Pregunta` (`id_pregunta`, `id_cuestionario_ad`, `pregunta`) VALUES
+(3, 1, 'PREGUNTA 1'),
+(4, 1, 'PREGUNTA 2'),
+(5, 1, 'PREGUNTA 3');
 
 -- --------------------------------------------------------
 
@@ -251,14 +286,23 @@ CREATE TABLE `Respuesta` (
   `id_encuesta` int NOT NULL,
   `id_pregunta` int NOT NULL,
   `id_cuestionario_ad` int NOT NULL,
-  `puntuacion` int NOT NULL
+  `puntuacion` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
 -- Volcado de datos para la tabla `Respuesta`
 --
 
-
+INSERT INTO `Respuesta` (`id_encuesta`, `id_pregunta`, `id_cuestionario_ad`, `puntuacion`) VALUES
+(1, 3, 1, 4),
+(1, 4, 1, 4),
+(2, 3, 1, 2),
+(2, 4, 1, 2),
+(3, 3, 1, 4),
+(3, 4, 1, 4),
+(3, 5, 1, 4),
+(4, 3, 1, 1),
+(4, 4, 1, 2);
 
 --
 -- Índices para tablas volcadas
@@ -354,34 +398,34 @@ ALTER TABLE `Respuesta`
 --
 
 --
--- AUTO_INCREMENT de la tabla `CuestionarioAlumnoDocente`
+-- AUTO_INCREMENT de la tabla `Carrera`
 --
-ALTER TABLE `CuestionarioAlumnoDocente`
-  MODIFY `id_cuestionario_ad` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+ALTER TABLE `Carrera`
+  MODIFY `id_carrera` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `Curso`
 --
 ALTER TABLE `Curso`
-  MODIFY `id_curso` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_curso` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT de la tabla `Encuesta`
+-- AUTO_INCREMENT de la tabla `Grupo`
 --
-ALTER TABLE `Encuesta`
-  MODIFY `id_encuesta` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+ALTER TABLE `Grupo`
+  MODIFY `id_grupo` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT de la tabla `Materia`
+--
+ALTER TABLE `Materia`
+  MODIFY `id_materia` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `Pregunta`
 --
 ALTER TABLE `Pregunta`
-  MODIFY `id_pregunta` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT de la tabla `Respuesta`
---
-ALTER TABLE `Respuesta`
-  MODIFY `id_encuesta` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_pregunta` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Restricciones para tablas volcadas
