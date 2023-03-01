@@ -159,9 +159,7 @@ CREATE TABLE `Encuesta` (
 -- Volcado de datos para la tabla `Encuesta`
 --
 
-INSERT INTO `Encuesta` (`id_encuesta`, `id_curso`, `matricula_alumno`, `id_cuestionario_ad`, `estatus`) VALUES
-(1, 1, 202000114, 1, 0),
-(1, 2, 202000115, 1, 0);
+
 
 -- --------------------------------------------------------
 
@@ -241,9 +239,7 @@ CREATE TABLE `Pregunta` (
 -- Volcado de datos para la tabla `Pregunta`
 --
 
-INSERT INTO `Pregunta` (`id_pregunta`, `id_cuestionario_ad`, `pregunta`) VALUES
-(1, 1, 'Hola'),
-(2, 1, 'ola de mar');
+
 
 -- --------------------------------------------------------
 
@@ -262,11 +258,7 @@ CREATE TABLE `Respuesta` (
 -- Volcado de datos para la tabla `Respuesta`
 --
 
-INSERT INTO `Respuesta` (`id_encuesta`, `id_pregunta`, `id_cuestionario_ad`, `puntuacion`) VALUES
-(1, 1, 1, 2),
-(1, 1, 1, 2),
-(1, 1, 1, 4),
-(1, 2, 1, 4);
+
 
 --
 -- Índices para tablas volcadas
