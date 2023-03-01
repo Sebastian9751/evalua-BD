@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: mysql
--- Tiempo de generación: 01-03-2023 a las 17:48:53
+-- Tiempo de generación: 01-03-2023 a las 20:23:41
 -- Versión del servidor: 8.0.32
 -- Versión de PHP: 8.1.16
 
@@ -42,9 +42,7 @@ GROUP BY Grupo.clave_grupo, nombre_materia, nombre_carrera, nombre_corto, id_per
 END$$
 
 CREATE DEFINER=`root`@`%` PROCEDURE `getTeachersAverageByPeriod` (IN `idPeriod` INT(4))   BEGIN
-
-
-SELECT id_periodo, Grupo.clave_grupo,nombre_materia,nombre_carrera, Docente.nombre, AVG(Respuesta.puntuacion) AS promedio_puntuacion
+SELECT id_periodo, Grupo.clave_grupo,nombre_materia,nombre_carrera, Docente.nombre,Docente.apellido_materno, Docente.apellido_paterno ,AVG(Respuesta.puntuacion) AS promedio_puntuacion
 FROM Encuesta 
 INNER JOIN Curso ON Encuesta.id_curso = Curso.id_curso 
 INNER JOIN Grupo ON Curso.id_grupo = Grupo.id_grupo 
@@ -54,9 +52,11 @@ INNER JOIN Materia ON Curso.id_materia = Materia.id_materia
 INNER JOIN Respuesta ON Encuesta.id_encuesta = Respuesta.id_encuesta  
 INNER JOIN Pregunta ON Respuesta.id_pregunta = Pregunta.id_pregunta
 
-WHERE id_periodo = idPeriod
+WHERE id_periodo = 3222
 
-GROUP BY id_periodo, Grupo.clave_grupo, nombre_materia, nombre_carrera, Docente.nombre;
+GROUP BY id_periodo, Grupo.clave_grupo, nombre_materia, nombre_carrera, Docente.nombre, Docente.apellido_materno,Docente.apellido_paterno;
+
+
 
 END$$
 
