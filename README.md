@@ -1,7 +1,7 @@
 # evalua-BD docs
 ### Datos de prueba insertados
 
-#Obtener el promedio de la encuesta por carrera
+# Obtener el promedio de la encuesta por carrera
 
       CALL getAverageByCareer({id})   -> donde el "id" es el de la carrera 
 
