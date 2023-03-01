@@ -3,7 +3,7 @@
 
 #Obtener el promedio de la encuesta por carrera
 
-      CALL getAverageByCareer({id})   -> donde el "id" es el de la carrera 
+      CALL getAverageByCareer({id})       -> donde el "id" es el de la carrera 
 
        1 = Software
        2 = Biomedica
@@ -13,7 +13,7 @@
 
 #Obtener la lista de profesores por periodo
 
-      CALL getTeachersAverageByPeriod({periodo}) -> donde el "periodo" es el del cuatrimestre 
+      CALL getTeachersAverageByPeriod({periodo})      -> donde el "periodo" es el del cuatrimestre 
 
       #Periodos 
       -3222
