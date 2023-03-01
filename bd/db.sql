@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: mysql
--- Tiempo de generación: 01-03-2023 a las 05:58:18
+-- Tiempo de generación: 01-03-2023 a las 17:48:53
 -- Versión del servidor: 8.0.32
 -- Versión de PHP: 8.1.16
 
@@ -38,6 +38,25 @@ INNER JOIN Pregunta ON Respuesta.id_pregunta = Pregunta.id_pregunta
 WHERE Carrera.id_carrera=  idCareer
 
 GROUP BY Grupo.clave_grupo, nombre_materia, nombre_carrera, nombre_corto, id_periodo;
+
+END$$
+
+CREATE DEFINER=`root`@`%` PROCEDURE `getTeachersAverageByPeriod` (IN `idPeriod` INT(4))   BEGIN
+
+
+SELECT id_periodo, Grupo.clave_grupo,nombre_materia,nombre_carrera, Docente.nombre, AVG(Respuesta.puntuacion) AS promedio_puntuacion
+FROM Encuesta 
+INNER JOIN Curso ON Encuesta.id_curso = Curso.id_curso 
+INNER JOIN Grupo ON Curso.id_grupo = Grupo.id_grupo 
+INNER JOIN Docente ON Curso.id_docente = Docente.id_docente
+INNER JOIN Carrera ON Grupo.id_carrera = Carrera.id_carrera
+INNER JOIN Materia ON Curso.id_materia = Materia.id_materia
+INNER JOIN Respuesta ON Encuesta.id_encuesta = Respuesta.id_encuesta  
+INNER JOIN Pregunta ON Respuesta.id_pregunta = Pregunta.id_pregunta
+
+WHERE id_periodo = idPeriod
+
+GROUP BY id_periodo, Grupo.clave_grupo, nombre_materia, nombre_carrera, Docente.nombre;
 
 END$$
 
@@ -128,7 +147,8 @@ INSERT INTO `Curso` (`id_curso`, `id_periodo`, `id_materia`, `id_grupo`, `id_doc
 (2, 3222, 1, 1, 2),
 (4, 3222, 1, 3, 1),
 (1, 3222, 2, 1, 1),
-(3, 3332, 2, 2, 1);
+(3, 3332, 2, 2, 1),
+(5, 3332, 3, 1, 2);
 
 -- --------------------------------------------------------
 
@@ -168,8 +188,8 @@ CREATE TABLE `Docente` (
 --
 
 INSERT INTO `Docente` (`id_docente`, `nombre`, `apellido_materno`, `apellido_paterno`, `correo`) VALUES
-(1, 'DOCENTE ', 'PRUEBA 1', 'PRUEBA 1-1', '@docente 1'),
-(2, 'DOCENTE PRUEBA 2', 'PRUEBA 2', 'PRUEBA 2-2', '@docente 2');
+(1, 'Vanessa', 'PRUEBA 1', 'PRUEBA 1-1', '@docente 1'),
+(2, 'Roberto ', 'PRUEBA 2', 'PRUEBA 2-2', '@docente 2');
 
 -- --------------------------------------------------------
 
@@ -193,7 +213,9 @@ INSERT INTO `Encuesta` (`id_encuesta`, `id_curso`, `matricula_alumno`, `id_cuest
 (1, 1, 202000114, 1, 1),
 (2, 2, 202000115, 1, 1),
 (3, 3, 202000111, 1, 1),
-(4, 4, 202000110, 1, 1);
+(4, 4, 202000110, 1, 1),
+(5, 5, 202000114, 1, 1),
+(6, 5, 202000111, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -234,7 +256,8 @@ CREATE TABLE `Materia` (
 
 INSERT INTO `Materia` (`id_materia`, `nombre_materia`, `nombre_corto_materia`) VALUES
 (1, 'Ingles I', 'ingles'),
-(2, 'Algebra', 'AGL');
+(2, 'Algebra', 'AGL'),
+(3, 'Redes', 'RED');
 
 -- --------------------------------------------------------
 
@@ -302,7 +325,13 @@ INSERT INTO `Respuesta` (`id_encuesta`, `id_pregunta`, `id_cuestionario_ad`, `pu
 (3, 4, 1, 4),
 (3, 5, 1, 4),
 (4, 3, 1, 1),
-(4, 4, 1, 2);
+(4, 4, 1, 2),
+(1, 3, 1, 3),
+(1, 4, 1, 3),
+(5, 3, 1, 3),
+(5, 4, 1, 2),
+(6, 3, 1, 4),
+(6, 4, 1, 4);
 
 --
 -- Índices para tablas volcadas
@@ -407,7 +436,7 @@ ALTER TABLE `Carrera`
 -- AUTO_INCREMENT de la tabla `Curso`
 --
 ALTER TABLE `Curso`
-  MODIFY `id_curso` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_curso` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `Grupo`
@@ -419,7 +448,7 @@ ALTER TABLE `Grupo`
 -- AUTO_INCREMENT de la tabla `Materia`
 --
 ALTER TABLE `Materia`
-  MODIFY `id_materia` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_materia` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `Pregunta`
