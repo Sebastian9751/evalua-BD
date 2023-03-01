@@ -15,7 +15,7 @@
 
       CALL getTeachersAverageByPeriod({periodo}) -> donde el "periodo" es el del cuatrimestre 
 
-      #### Periodos 
+      #Periodos 
       -3222
       -3332
 
