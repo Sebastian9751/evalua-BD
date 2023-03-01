@@ -1,5 +1,5 @@
 # evalua-BD docs
-### Datos de preba insertados
+### Datos de prueba insertados
 
 #Obtener el promedio de la encuesta por carrera
 
