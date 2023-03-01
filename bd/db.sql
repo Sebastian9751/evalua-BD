@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: mysql
--- Tiempo de generación: 01-03-2023 a las 20:23:41
+-- Tiempo de generación: 01-03-2023 a las 22:38:06
 -- Versión del servidor: 8.0.32
 -- Versión de PHP: 8.1.16
 
@@ -38,6 +38,24 @@ INNER JOIN Pregunta ON Respuesta.id_pregunta = Pregunta.id_pregunta
 WHERE Carrera.id_carrera=  idCareer
 
 GROUP BY Grupo.clave_grupo, nombre_materia, nombre_carrera, nombre_corto, id_periodo;
+
+END$$
+
+CREATE DEFINER=`root`@`%` PROCEDURE `getGroupsByTeacher` (IN `idDoc` INT(10))   BEGIN
+
+SELECT Docente.id_docente, id_periodo, Grupo.clave_grupo,nombre_materia, Docente.nombre,Docente.apellido_materno, Docente.apellido_paterno, AVG(Respuesta.puntuacion) AS promedio_puntuacion
+FROM Encuesta 
+INNER JOIN Curso ON Encuesta.id_curso = Curso.id_curso 
+INNER JOIN Grupo ON Curso.id_grupo = Grupo.id_grupo 
+INNER JOIN Docente ON Curso.id_docente = Docente.id_docente
+INNER JOIN Carrera ON Grupo.id_carrera = Carrera.id_carrera
+INNER JOIN Materia ON Curso.id_materia = Materia.id_materia
+INNER JOIN Respuesta ON Encuesta.id_encuesta = Respuesta.id_encuesta  
+INNER JOIN Pregunta ON Respuesta.id_pregunta = Pregunta.id_pregunta
+
+WHERE Docente.id_docente = idDoc
+
+GROUP BY id_periodo,Grupo.clave_grupo, Docente.id_docente, nombre_materia, Docente.nombre, Docente.apellido_materno, Docente.apellido_paterno;
 
 END$$
 
