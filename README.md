@@ -43,3 +43,11 @@
       1 = 28AV
       2 = 28BII
       3 = 27BIOTEC
+
+#Lista de estudiantes por grupo
+
+      CALL getStudentsByGroup({id})       -> donde el "id" es el del grupo
+
+      1 = 28AV
+      2 = 28BII
+      3 = 27BIOTEC

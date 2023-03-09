@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: mysql
--- Tiempo de generación: 09-03-2023 a las 04:33:21
+-- Tiempo de generación: 09-03-2023 a las 04:55:48
 -- Versión del servidor: 8.0.32
 -- Versión de PHP: 8.1.16
 
@@ -93,6 +93,18 @@ GROUP BY id_periodo,Grupo.clave_grupo, Docente.id_docente, nombre_materia, Docen
 
 END$$
 
+CREATE DEFINER=`root`@`%` PROCEDURE `getStudentsByGroup` (IN `idGroup` INT(10))   BEGIN
+SELECT id_periodo, nombre_carrera, clave_grupo, matricula_alumno, nombre, apellido_materno, apellido_paterno 
+FROM Encuesta 
+INNER JOIN Curso ON Encuesta.id_curso = Curso.id_curso 
+INNER JOIN Alumno ON Encuesta.matricula_alumno = Alumno.matricula
+INNER JOIN Grupo ON Curso.id_grupo = Grupo.id_grupo 
+INNER JOIN Carrera ON Grupo.id_carrera = Carrera.id_carrera
+
+WHERE Grupo.id_grupo= idGroup;
+
+END$$
+
 CREATE DEFINER=`root`@`%` PROCEDURE `getTeachersAverageByPeriod` (IN `idPeriod` INT(4))   BEGIN
 SELECT id_periodo, Grupo.clave_grupo,nombre_materia,nombre_carrera, Docente.nombre,Docente.apellido_materno, Docente.apellido_paterno ,AVG(Respuesta.puntuacion) AS promedio_puntuacion
 FROM Encuesta 
@@ -132,6 +144,7 @@ CREATE TABLE `Alumno` (
 --
 
 INSERT INTO `Alumno` (`matricula`, `nombre`, `apellido_materno`, `apellido_paterno`) VALUES
+(202000109, 'TEST', 'TES-1', 'TEST-2'),
 (202000110, 'BIOALUM', 'ASA', 'AASS'),
 (202000111, 'INCOGNITO', 'ap1', 'ap2'),
 (202000114, 'Sebas', 's', 'sm'),
@@ -259,7 +272,7 @@ INSERT INTO `Encuesta` (`id_encuesta`, `id_curso`, `matricula_alumno`, `id_cuest
 (3, 3, 202000111, 1, 1),
 (4, 4, 202000110, 1, 1),
 (5, 5, 202000114, 1, 1),
-(6, 5, 202000111, 1, 1);
+(6, 5, 202000109, 1, 1);
 
 -- --------------------------------------------------------
 
