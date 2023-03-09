@@ -34,3 +34,12 @@
        1 = Software
        2 = Biomedica
        3 = Biotecnologia
+
+
+#Promedio de pregunta por grupo 
+
+      CALL getAverageQuestionByGroup({id})      -> donde el "id" es el del grupo
+      
+      1 = 28AV
+      2 = 28BII
+      3 = 27BIOTEC

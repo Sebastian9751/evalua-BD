@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: mysql
--- Tiempo de generación: 09-03-2023 a las 04:13:02
+-- Tiempo de generación: 09-03-2023 a las 04:33:21
 -- Versión del servidor: 8.0.32
 -- Versión de PHP: 8.1.16
 
@@ -58,6 +58,22 @@ WHERE Carrera.id_carrera= idCareer
 GROUP BY id_periodo,Grupo.clave_grupo, Carrera.nombre_carrera, id_periodo;
 
 END$$
+
+CREATE DEFINER=`root`@`%` PROCEDURE `getAverageQuestionByGroup` (IN `idGroup` INT(10))   BEGIN
+SELECT id_periodo, Pregunta.id_pregunta, Pregunta.pregunta, Pregunta.id_cuestionario_ad, Grupo.clave_grupo, AVG(Respuesta.puntuacion) AS promedio_puntuacion
+FROM Encuesta 
+INNER JOIN Curso ON Encuesta.id_curso = Curso.id_curso 
+INNER JOIN Grupo ON Curso.id_grupo = Grupo.id_grupo 
+INNER JOIN Carrera ON Grupo.id_carrera = Carrera.id_carrera
+INNER JOIN Materia ON Curso.id_materia = Materia.id_materia
+INNER JOIN Respuesta ON Encuesta.id_encuesta = Respuesta.id_encuesta  
+INNER JOIN Pregunta ON Respuesta.id_pregunta = Pregunta.id_pregunta
+
+WHERE Grupo.id_grupo =  idGroup
+
+GROUP BY  Pregunta.id_pregunta, Pregunta.pregunta, Pregunta.id_cuestionario_ad, Grupo.clave_grupo, id_periodo;
+
+ END$$
 
 CREATE DEFINER=`root`@`%` PROCEDURE `getGroupsByTeacher` (IN `idDoc` INT(10))   BEGIN
 
