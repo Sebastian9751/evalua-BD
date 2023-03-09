@@ -13,7 +13,7 @@
 
 #Obtener la lista de profesores por periodo
 
-      CALL getTeachersAverageByPeriod({periodo})      -> donde el "periodo" es el del cuatrimestre 
+      CALL getTeachersAverageByPeriod({periodo})       -> donde el "periodo" es el del cuatrimestre 
 
       #Periodos 
       -3222
@@ -25,3 +25,12 @@
 
        1 = Vanessa
        2 = Roberto
+
+
+#Obtener la puntuacion individual de cada grupo por carrera 
+
+      CALL getAverageGroupByCarrer({id})   -> donde el "id" es el de la carrera 
+
+       1 = Software
+       2 = Biomedica
+       3 = Biotecnologia

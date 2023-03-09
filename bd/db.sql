@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: mysql
--- Tiempo de generación: 01-03-2023 a las 22:38:06
+-- Tiempo de generación: 09-03-2023 a las 04:13:02
 -- Versión del servidor: 8.0.32
 -- Versión de PHP: 8.1.16
 
@@ -38,6 +38,24 @@ INNER JOIN Pregunta ON Respuesta.id_pregunta = Pregunta.id_pregunta
 WHERE Carrera.id_carrera=  idCareer
 
 GROUP BY Grupo.clave_grupo, nombre_materia, nombre_carrera, nombre_corto, id_periodo;
+
+END$$
+
+CREATE DEFINER=`root`@`%` PROCEDURE `getAverageGroupByCarrer` (IN `idCareer` INT(10))   BEGIN
+
+SELECT  id_periodo, clave_grupo, nombre_carrera, AVG(Respuesta.puntuacion) AS promedio_puntuacion
+FROM Encuesta 
+INNER JOIN Curso ON Encuesta.id_curso = Curso.id_curso 
+INNER JOIN Grupo ON Curso.id_grupo = Grupo.id_grupo 
+INNER JOIN Docente ON Curso.id_docente = Docente.id_docente
+INNER JOIN Carrera ON Grupo.id_carrera = Carrera.id_carrera
+INNER JOIN Materia ON Curso.id_materia = Materia.id_materia
+INNER JOIN Respuesta ON Encuesta.id_encuesta = Respuesta.id_encuesta  
+INNER JOIN Pregunta ON Respuesta.id_pregunta = Pregunta.id_pregunta
+
+WHERE Carrera.id_carrera= idCareer
+
+GROUP BY id_periodo,Grupo.clave_grupo, Carrera.nombre_carrera, id_periodo;
 
 END$$
 
@@ -178,14 +196,6 @@ CREATE TABLE `Curso_has_Alumno` (
   `id_curso` int NOT NULL,
   `matricula` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
---
--- Volcado de datos para la tabla `Curso_has_Alumno`
---
-
-INSERT INTO `Curso_has_Alumno` (`id_curso`, `matricula`) VALUES
-(1, 202000114),
-(2, 202000114);
 
 -- --------------------------------------------------------
 
