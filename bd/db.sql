@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: mysql
--- Tiempo de generación: 09-03-2023 a las 04:55:48
+-- Tiempo de generación: 12-03-2023 a las 17:55:38
 -- Versión del servidor: 8.0.32
 -- Versión de PHP: 8.1.16
 
@@ -103,6 +103,18 @@ INNER JOIN Carrera ON Grupo.id_carrera = Carrera.id_carrera
 
 WHERE Grupo.id_grupo= idGroup;
 
+END$$
+
+CREATE DEFINER=`root`@`%` PROCEDURE `getTeacherByStudent` (IN `Mt` INT(9), IN `Pe` INT(4))   BEGIN
+SELECT Curso.id_periodo, Curso.id_curso, Materia.id_materia, Materia.nombre_materia,Grupo.clave_grupo, Materia.nombre_corto_materia, Docente.id_docente, Docente.nombre,Docente.apellido_materno, Docente.apellido_paterno,Carrera.nombre_carrera
+FROM Curso_has_Alumno 
+INNER JOIN Curso ON Curso_has_Alumno.id_curso= Curso.id_curso 
+INNER JOIN Materia ON Curso.id_materia
+INNER JOIN Docente ON Curso.id_docente= Docente.id_docente
+INNER JOIN Grupo ON Curso.id_grupo = Grupo.id_grupo
+INNER JOIN Carrera ON Grupo.id_carrera =Carrera.id_carrera
+
+WHERE matricula = mt AND  Curso.id_periodo = Pe;
 END$$
 
 CREATE DEFINER=`root`@`%` PROCEDURE `getTeachersAverageByPeriod` (IN `idPeriod` INT(4))   BEGIN
@@ -225,6 +237,18 @@ CREATE TABLE `Curso_has_Alumno` (
   `id_curso` int NOT NULL,
   `matricula` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+--
+-- Volcado de datos para la tabla `Curso_has_Alumno`
+--
+
+INSERT INTO `Curso_has_Alumno` (`id_curso`, `matricula`) VALUES
+(5, 202000109),
+(4, 202000110),
+(3, 202000111),
+(1, 202000114),
+(5, 202000114),
+(2, 202000115);
 
 -- --------------------------------------------------------
 
