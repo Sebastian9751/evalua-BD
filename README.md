@@ -51,3 +51,15 @@
       1 = 28AV
       2 = 28BII
       3 = 27BIOTEC
+
+#Lista de profeosres por alumno (matricula)
+
+      CALL getTeacherByStudent({matricula}, {periodo})      ->donde "matricula" es la del alumno y "perido" es el del cuatrimestre
+      
+      Matriculas              #Periodos 
+    
+      - 202000109             - 3222
+      - 202000110             - 3332                        
+      - 202000111
+      - 202000114
+      - 202000115

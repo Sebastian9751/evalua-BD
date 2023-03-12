@@ -145,3 +145,22 @@ WHERE Grupo.id_grupo= idGroup;
 END //
 
 DELIMITER ;
+
+
+#Profesores por estudiante
+
+DELIMITER //
+
+CREATE PROCEDURE getTeacherByStudent(IN Mt int(9), IN Pe int(4))
+BEGIN
+SELECT Curso.id_periodo, Curso.id_curso, Materia.id_materia, Materia.nombre_materia,Grupo.clave_grupo, Materia.nombre_corto_materia, Docente.id_docente, Docente.nombre,Docente.apellido_materno, Docente.apellido_paterno,Carrera.nombre_carrera
+FROM Curso_has_Alumno 
+INNER JOIN Curso ON Curso_has_Alumno.id_curso= Curso.id_curso 
+INNER JOIN Materia ON Curso.id_materia
+INNER JOIN Docente ON Curso.id_docente= Docente.id_docente
+INNER JOIN Grupo ON Curso.id_grupo = Grupo.id_grupo
+INNER JOIN Carrera ON Grupo.id_carrera =Carrera.id_carrera
+
+WHERE matricula = mt AND  Curso.id_periodo = Pe;
+END //
+DELIMITER ;
