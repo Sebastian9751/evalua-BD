@@ -63,4 +63,3 @@
       - 202000111
       - 202000114
       - 202000115
-      Nota: Si el alumno notiene cursos un peridod especifico la consulta devolvera 
