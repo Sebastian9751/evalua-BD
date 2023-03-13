@@ -27,7 +27,7 @@
       -3222
       -3332
 
-#### Obtener la lista de grupos por profesor
+##### Obtener la lista de grupos por profesor
 
       CALL getGroupsByTeacher({id}) -> donde el "id" es el del profesor
 
