@@ -30,10 +30,18 @@
 
 ##### Obtener la lista de grupos por profesor
 
-      CALL getGroupsByTeacher({id}) -> donde el "id" es el del profesor
+      CALL getGroupsByTeacher({id},{id_carrera)) -> donde el "id" es el del profesor
 
+       Profesores
+      
        1 = Vanessa
        2 = Roberto
+       
+       Carreras id
+       
+       1 = Software
+       2 = Biomedica
+       3 = Biotecnologia
 
 
 #### Obtener la puntuacion individual de cada grupo por carrera 
