@@ -75,7 +75,7 @@ GROUP BY  Pregunta.id_pregunta, Pregunta.pregunta, Pregunta.id_cuestionario_ad, 
 
  END$$
 
-CREATE DEFINER=`root`@`%` PROCEDURE `getGroupsByTeacher` (IN `idDoc` INT(10))   BEGIN
+CREATE DEFINER=`root`@`%` PROCEDURE `getGroupsByTeacher` (IN `idDoc` INT(10), IN `idCarr` INT(10))   BEGIN
 
 SELECT Docente.id_docente, id_periodo, Grupo.clave_grupo,nombre_materia, Docente.nombre,Docente.apellido_materno, Docente.apellido_paterno, AVG(Respuesta.puntuacion) AS promedio_puntuacion
 FROM Encuesta 
@@ -87,7 +87,7 @@ INNER JOIN Materia ON Curso.id_materia = Materia.id_materia
 INNER JOIN Respuesta ON Encuesta.id_encuesta = Respuesta.id_encuesta  
 INNER JOIN Pregunta ON Respuesta.id_pregunta = Pregunta.id_pregunta
 
-WHERE Docente.id_docente = idDoc
+WHERE Docente.id_docente = idDoc AND Carrera.id_carrera = idCarr; 
 
 GROUP BY id_periodo,Grupo.clave_grupo, Docente.id_docente, nombre_materia, Docente.nombre, Docente.apellido_materno, Docente.apellido_paterno;
 
