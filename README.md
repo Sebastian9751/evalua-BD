@@ -9,7 +9,7 @@
 ![er](https://user-images.githubusercontent.com/85807291/224609909-98afe2d4-f7f6-45d5-ae5f-83af3070dac9.png)
 
 #### <em> La base de datos contiene registros de prueba insertados </em>
-#Obtener el promedio de la encuesta por carrera
+##### Obtener el promedio de la encuesta por carrera
 
       CALL getAverageByCareer({id})       -> donde el "id" es el de la carrera 
 
