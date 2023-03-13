@@ -128,7 +128,7 @@ INNER JOIN Materia ON Curso.id_materia = Materia.id_materia
 INNER JOIN Respuesta ON Encuesta.id_encuesta = Respuesta.id_encuesta  
 INNER JOIN Pregunta ON Respuesta.id_pregunta = Pregunta.id_pregunta
 
-WHERE id_periodo = idPeriod;
+WHERE id_periodo = idPeriod
 
 GROUP BY id_periodo, Grupo.clave_grupo, nombre_materia, nombre_carrera, Docente.nombre, Docente.apellido_materno,Docente.apellido_paterno;
 
