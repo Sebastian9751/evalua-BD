@@ -6,7 +6,8 @@
       
 #### Este es el diagrama ER
 
-![er](https://user-images.githubusercontent.com/85807291/224609909-98afe2d4-f7f6-45d5-ae5f-83af3070dac9.png)
+![er](https://user-images.githubusercontent.com/85807291/224757342-5fd2eac9-c1ea-4e52-9377-aa64b33beceb.png)
+
 
 #### <em> La base de datos contiene registros de prueba insertados </em>
 ##### Obtener el promedio de la encuesta por carrera
