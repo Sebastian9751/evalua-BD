@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: mysql
--- Tiempo de generación: 12-03-2023 a las 17:55:38
+-- Tiempo de generación: 13-03-2023 a las 16:01:46
 -- Versión del servidor: 8.0.32
 -- Versión de PHP: 8.1.16
 
@@ -283,14 +283,14 @@ CREATE TABLE `Encuesta` (
   `id_curso` int NOT NULL,
   `matricula_alumno` int NOT NULL,
   `id_cuestionario_ad` int NOT NULL,
-  `estatus` int DEFAULT NULL
+  `estado` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
 -- Volcado de datos para la tabla `Encuesta`
 --
 
-INSERT INTO `Encuesta` (`id_encuesta`, `id_curso`, `matricula_alumno`, `id_cuestionario_ad`, `estatus`) VALUES
+INSERT INTO `Encuesta` (`id_encuesta`, `id_curso`, `matricula_alumno`, `id_cuestionario_ad`, `estado`) VALUES
 (1, 1, 202000114, 1, 1),
 (2, 2, 202000115, 1, 1),
 (3, 3, 202000111, 1, 1),
@@ -348,14 +348,14 @@ INSERT INTO `Materia` (`id_materia`, `nombre_materia`, `nombre_corto_materia`) V
 
 CREATE TABLE `Periodo` (
   `id_periodo` int NOT NULL,
-  `Estatus` int DEFAULT NULL
+  `Estado` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
 -- Volcado de datos para la tabla `Periodo`
 --
 
-INSERT INTO `Periodo` (`id_periodo`, `Estatus`) VALUES
+INSERT INTO `Periodo` (`id_periodo`, `Estado`) VALUES
 (3222, 0),
 (3332, 0);
 
