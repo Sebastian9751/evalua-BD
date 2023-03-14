@@ -102,7 +102,7 @@ CREATE TABLE `Grupo` (
 --
 
 CREATE TABLE `Materia` (
-  `id_materia` int NOT NULL AUTO_INCREMENT,
+  `id_materia` int NOT NULL ,
   `nombre_materia` varchar(60) DEFAULT NULL,
   `nombre_corto_materia` varchar(45) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
@@ -124,7 +124,7 @@ CREATE TABLE `Periodo` (
 --
 
 CREATE TABLE `Pregunta` (
-  `id_pregunta` int NOT NULL AUTO_INCREMENT,
+  `id_pregunta` int NOT NULL ,
   `id_cuestionario_ad` int NOT NULL,
   `pregunta` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
