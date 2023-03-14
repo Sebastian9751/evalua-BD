@@ -1,7 +1,8 @@
 # evalua-BD docs
 
 #### Al importar la base de datos en el gestor que este utlizando, debera asignarle el siguente cojetamiento
-![bdc](https://user-images.githubusercontent.com/85807291/224610108-0ad05757-6257-4426-866c-4da34eacf91b.PNG)
+![image](https://user-images.githubusercontent.com/85807291/224874708-b552bd53-b3aa-44ab-8540-d87d8f7f92a5.png)
+
 
       
 #### Este es el diagrama ER
