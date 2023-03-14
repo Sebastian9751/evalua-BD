@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: mysql
--- Tiempo de generación: 14-03-2023 a las 17:16:36
--- Versión del servidor: 8.0.32
--- Versión de PHP: 8.1.16
+-- Servidor: localhost
+-- Tiempo de generación: 14-03-2023 a las 22:06:57
+-- Versión del servidor: 5.5.68-MariaDB
+-- Versión de PHP: 8.1.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -21,6 +21,123 @@ SET time_zone = "+00:00";
 -- Base de datos: `evalua_i`
 --
 
+DELIMITER $$
+--
+-- Procedimientos
+--
+CREATE DEFINER=`SistemaEval`@`localhost` PROCEDURE `getAverageByCareer` (IN `idCareer` INT(10))  BEGIN
+SELECT id_periodo, Grupo.clave_grupo,nombre_materia,nombre_carrera,nombre_corto, AVG(Respuesta.puntuacion) AS promedio_puntuacion
+FROM Encuesta 
+INNER JOIN Curso ON Encuesta.id_curso = Curso.id_curso 
+INNER JOIN Grupo ON Curso.id_grupo = Grupo.id_grupo 
+INNER JOIN Carrera ON Grupo.id_carrera = Carrera.id_carrera
+INNER JOIN Materia ON Curso.id_materia = Materia.id_materia
+INNER JOIN Respuesta ON Encuesta.id_encuesta = Respuesta.id_encuesta  
+INNER JOIN Pregunta ON Respuesta.id_pregunta = Pregunta.id_pregunta
+
+WHERE Carrera.id_carrera=  idCareer
+
+GROUP BY Grupo.clave_grupo, nombre_materia, nombre_carrera, nombre_corto, id_periodo;
+
+END$$
+
+CREATE DEFINER=`SistemaEval`@`localhost` PROCEDURE `getAverageGroupByCarrer` (IN `idCareer` INT(10))  BEGIN
+
+SELECT  id_periodo, clave_grupo, nombre_carrera, AVG(Respuesta.puntuacion) AS promedio_puntuacion
+FROM Encuesta 
+INNER JOIN Curso ON Encuesta.id_curso = Curso.id_curso 
+INNER JOIN Grupo ON Curso.id_grupo = Grupo.id_grupo 
+INNER JOIN Docente ON Curso.id_docente = Docente.id_docente
+INNER JOIN Carrera ON Grupo.id_carrera = Carrera.id_carrera
+INNER JOIN Materia ON Curso.id_materia = Materia.id_materia
+INNER JOIN Respuesta ON Encuesta.id_encuesta = Respuesta.id_encuesta  
+INNER JOIN Pregunta ON Respuesta.id_pregunta = Pregunta.id_pregunta
+
+WHERE Carrera.id_carrera= idCareer
+
+GROUP BY id_periodo,Grupo.clave_grupo, Carrera.nombre_carrera, id_periodo;
+
+END$$
+
+CREATE DEFINER=`SistemaEval`@`localhost` PROCEDURE `getAverageQuestionByGroup` (IN `idGroup` INT(10))  BEGIN
+SELECT id_periodo, Pregunta.id_pregunta, Pregunta.pregunta, Pregunta.id_cuestionario_ad, Grupo.clave_grupo, AVG(Respuesta.puntuacion) AS promedio_puntuacion
+FROM Encuesta 
+INNER JOIN Curso ON Encuesta.id_curso = Curso.id_curso 
+INNER JOIN Grupo ON Curso.id_grupo = Grupo.id_grupo 
+INNER JOIN Carrera ON Grupo.id_carrera = Carrera.id_carrera
+INNER JOIN Materia ON Curso.id_materia = Materia.id_materia
+INNER JOIN Respuesta ON Encuesta.id_encuesta = Respuesta.id_encuesta  
+INNER JOIN Pregunta ON Respuesta.id_pregunta = Pregunta.id_pregunta
+
+WHERE Grupo.id_grupo =  idGroup
+
+GROUP BY  Pregunta.id_pregunta, Pregunta.pregunta, Pregunta.id_cuestionario_ad, Grupo.clave_grupo, id_periodo;
+
+ END$$
+
+CREATE DEFINER=`SistemaEval`@`localhost` PROCEDURE `getGroupsByTeacher` (IN `idDoc` INT(10), IN `idCarr` INT(10))  BEGIN
+
+SELECT Docente.id_docente, id_periodo, Grupo.clave_grupo,nombre_materia, Docente.nombre,Docente.apellido_materno, Docente.apellido_paterno, AVG(Respuesta.puntuacion) AS promedio_puntuacion
+FROM Encuesta 
+INNER JOIN Curso ON Encuesta.id_curso = Curso.id_curso 
+INNER JOIN Grupo ON Curso.id_grupo = Grupo.id_grupo 
+INNER JOIN Docente ON Curso.id_docente = Docente.id_docente
+INNER JOIN Carrera ON Grupo.id_carrera = Carrera.id_carrera
+INNER JOIN Materia ON Curso.id_materia = Materia.id_materia
+INNER JOIN Respuesta ON Encuesta.id_encuesta = Respuesta.id_encuesta  
+INNER JOIN Pregunta ON Respuesta.id_pregunta = Pregunta.id_pregunta
+
+WHERE Docente.id_docente = idDoc AND Carrera.id_carrera = idCarr 
+
+GROUP BY id_periodo,Grupo.clave_grupo, Docente.id_docente, nombre_materia, Docente.nombre, Docente.apellido_materno, Docente.apellido_paterno;
+
+END$$
+
+CREATE DEFINER=`SistemaEval`@`localhost` PROCEDURE `getStudentsByGroup` (IN `idGroup` INT(10))  BEGIN
+SELECT id_periodo, nombre_carrera, clave_grupo, matricula_alumno, nombre, apellido_materno, apellido_paterno 
+FROM Encuesta 
+INNER JOIN Curso ON Encuesta.id_curso = Curso.id_curso 
+INNER JOIN Alumno ON Encuesta.matricula_alumno = Alumno.matricula
+INNER JOIN Grupo ON Curso.id_grupo = Grupo.id_grupo 
+INNER JOIN Carrera ON Grupo.id_carrera = Carrera.id_carrera
+
+WHERE Grupo.id_grupo= idGroup;
+
+END$$
+
+CREATE DEFINER=`SistemaEval`@`localhost` PROCEDURE `getTeacherByStudent` (IN `Mt` INT(9), IN `Pe` INT(4))  BEGIN
+SELECT Curso.id_periodo, Curso.id_curso, Materia.id_materia, Materia.nombre_materia,Grupo.clave_grupo, Materia.nombre_corto_materia, Docente.id_docente, Docente.nombre,Docente.apellido_materno, Docente.apellido_paterno,Carrera.nombre_carrera
+FROM Curso_has_Alumno 
+INNER JOIN Curso ON Curso_has_Alumno.id_curso= Curso.id_curso 
+INNER JOIN Materia ON Curso.id_materia
+INNER JOIN Docente ON Curso.id_docente= Docente.id_docente
+INNER JOIN Grupo ON Curso.id_grupo = Grupo.id_grupo
+INNER JOIN Carrera ON Grupo.id_carrera =Carrera.id_carrera
+
+WHERE matricula = mt AND  Curso.id_periodo = Pe;
+END$$
+
+CREATE DEFINER=`SistemaEval`@`localhost` PROCEDURE `getTeachersAverageByPeriod` (IN `idPeriod` INT(4))  BEGIN
+SELECT id_periodo, Grupo.clave_grupo,nombre_materia,nombre_carrera, Docente.nombre,Docente.apellido_materno, Docente.apellido_paterno ,AVG(Respuesta.puntuacion) AS promedio_puntuacion
+FROM Encuesta 
+INNER JOIN Curso ON Encuesta.id_curso = Curso.id_curso 
+INNER JOIN Grupo ON Curso.id_grupo = Grupo.id_grupo 
+INNER JOIN Docente ON Curso.id_docente = Docente.id_docente
+INNER JOIN Carrera ON Grupo.id_carrera = Carrera.id_carrera
+INNER JOIN Materia ON Curso.id_materia = Materia.id_materia
+INNER JOIN Respuesta ON Encuesta.id_encuesta = Respuesta.id_encuesta  
+INNER JOIN Pregunta ON Respuesta.id_pregunta = Pregunta.id_pregunta
+
+WHERE id_periodo = idPeriod
+
+GROUP BY id_periodo, Grupo.clave_grupo, nombre_materia, nombre_carrera, Docente.nombre, Docente.apellido_materno,Docente.apellido_paterno;
+
+
+
+END$$
+
+DELIMITER ;
+
 -- --------------------------------------------------------
 
 --
@@ -28,11 +145,11 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `Alumno` (
-  `matricula` int NOT NULL,
+  `matricula` int(11) NOT NULL,
   `nombre` varchar(60) DEFAULT NULL,
   `apellido_materno` varchar(50) DEFAULT NULL,
   `apellido_paterno` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -41,11 +158,25 @@ CREATE TABLE `Alumno` (
 --
 
 CREATE TABLE `Carrera` (
-  `id_carrera` int NOT NULL,
+  `id_carrera` int(11) NOT NULL,
   `nombre_carrera` varchar(60) DEFAULT NULL,
   `nombre_corto` varchar(50) DEFAULT NULL,
-  `correo_institucional` varchar(120) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `correo_institucional` varchar(120) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `Carrera`
+--
+
+INSERT INTO `Carrera` (`id_carrera`, `nombre_carrera`, `nombre_corto`, `correo_institucional`, `status`) VALUES
+(1, 'INGENIERIA EN BIOTECNOLOGIA', 'ING. BIOTECNOLOGIA', '@miuniversidad.edu', 1),
+(2, 'INGENIERIA EN SOFTWARE', 'ING. SOFTWARE', '@miuniversidad.edu', 1),
+(3, 'INGENIERIA FINANCIERA', 'ING. FINANCIERA', '@miuniversidad.edu', 1),
+(4, 'LICENCIATURA EN ADMINISTRACIÓN Y GESTIÓN EMPRESARIAL ', 'LIC. GES.Y PYMES', '@miuniversidad.edu', 0),
+(5, 'LICENCIATURA EN TERAPIA FISICA', 'LIC. TERAPIA FISICA', '@miuniversidad.edu', 1),
+(6, 'INGENIERIA EN BIOMÉDICA', 'ING. BIOMEDICA', '@miuniversidad.edu', 1),
+(7, 'LICENCIATURA ADMINISTRACION Y GESTION DE PYMES', 'LAGE', '@miuniversidad.edu', 1);
 
 -- --------------------------------------------------------
 
@@ -54,9 +185,9 @@ CREATE TABLE `Carrera` (
 --
 
 CREATE TABLE `CuestionarioAlumnoDocente` (
-  `id_cuestionario_ad` int NOT NULL,
+  `id_cuestionario_ad` int(11) NOT NULL,
   `descripcion` varchar(60) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `CuestionarioAlumnoDocente`
@@ -73,12 +204,12 @@ INSERT INTO `CuestionarioAlumnoDocente` (`id_cuestionario_ad`, `descripcion`) VA
 --
 
 CREATE TABLE `Curso` (
-  `id_curso` int NOT NULL,
-  `id_periodo` int NOT NULL,
-  `id_materia` int NOT NULL,
-  `id_grupo` int NOT NULL,
-  `id_docente` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `id_curso` int(11) NOT NULL,
+  `id_periodo` int(11) NOT NULL,
+  `id_materia` int(11) NOT NULL,
+  `id_grupo` int(11) NOT NULL,
+  `id_docente` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -87,9 +218,9 @@ CREATE TABLE `Curso` (
 --
 
 CREATE TABLE `Curso_has_Alumno` (
-  `id_curso` int NOT NULL,
-  `matricula` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `id_curso` int(11) NOT NULL,
+  `matricula` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -98,12 +229,12 @@ CREATE TABLE `Curso_has_Alumno` (
 --
 
 CREATE TABLE `Docente` (
-  `id_docente` int NOT NULL,
+  `id_docente` int(11) NOT NULL,
   `nombre` varchar(60) DEFAULT NULL,
   `apellido_materno` varchar(50) DEFAULT NULL,
   `apellido_paterno` varchar(50) DEFAULT NULL,
   `correo` varchar(120) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -112,12 +243,12 @@ CREATE TABLE `Docente` (
 --
 
 CREATE TABLE `Encuesta` (
-  `id_encuesta` int NOT NULL,
-  `id_curso` int NOT NULL,
-  `matricula_alumno` int NOT NULL,
-  `id_cuestionario_ad` int NOT NULL,
-  `estatus` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `id_encuesta` int(11) NOT NULL,
+  `id_curso` int(11) NOT NULL,
+  `matricula_alumno` int(11) NOT NULL,
+  `id_cuestionario_ad` int(11) NOT NULL,
+  `estatus` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -126,10 +257,10 @@ CREATE TABLE `Encuesta` (
 --
 
 CREATE TABLE `Grupo` (
-  `id_grupo` int NOT NULL,
+  `id_grupo` int(11) NOT NULL,
   `clave_grupo` varchar(20) DEFAULT NULL,
-  `id_carrera` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `id_carrera` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -138,10 +269,10 @@ CREATE TABLE `Grupo` (
 --
 
 CREATE TABLE `Materia` (
-  `id_materia` int NOT NULL,
+  `id_materia` int(11) NOT NULL,
   `nombre_materia` varchar(60) DEFAULT NULL,
   `nombre_corto_materia` varchar(45) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -150,9 +281,9 @@ CREATE TABLE `Materia` (
 --
 
 CREATE TABLE `Periodo` (
-  `id_periodo` int NOT NULL,
-  `Estatus` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `id_periodo` int(11) NOT NULL,
+  `Estatus` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -161,10 +292,10 @@ CREATE TABLE `Periodo` (
 --
 
 CREATE TABLE `Pregunta` (
-  `id_pregunta` int NOT NULL,
-  `id_cuestionario_ad` int NOT NULL,
+  `id_pregunta` int(11) NOT NULL,
+  `id_cuestionario_ad` int(11) NOT NULL,
   `pregunta` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `Pregunta`
@@ -213,11 +344,11 @@ INSERT INTO `Pregunta` (`id_pregunta`, `id_cuestionario_ad`, `pregunta`) VALUES
 --
 
 CREATE TABLE `Respuesta` (
-  `id_encuesta` int NOT NULL,
-  `id_pregunta` int NOT NULL,
-  `id_cuestionario_ad` int NOT NULL,
-  `puntuacion` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `id_encuesta` int(11) NOT NULL,
+  `id_pregunta` int(11) NOT NULL,
+  `id_cuestionario_ad` int(11) NOT NULL,
+  `puntuacion` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Índices para tablas volcadas
@@ -316,31 +447,31 @@ ALTER TABLE `Respuesta`
 -- AUTO_INCREMENT de la tabla `Carrera`
 --
 ALTER TABLE `Carrera`
-  MODIFY `id_carrera` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_carrera` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `Curso`
 --
 ALTER TABLE `Curso`
-  MODIFY `id_curso` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_curso` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `Grupo`
 --
 ALTER TABLE `Grupo`
-  MODIFY `id_grupo` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_grupo` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `Materia`
 --
 ALTER TABLE `Materia`
-  MODIFY `id_materia` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_materia` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `Pregunta`
 --
 ALTER TABLE `Pregunta`
-  MODIFY `id_pregunta` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id_pregunta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- Restricciones para tablas volcadas
