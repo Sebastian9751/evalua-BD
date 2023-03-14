@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: mysql
--- Tiempo de generación: 14-03-2023 a las 03:04:41
+-- Tiempo de generación: 14-03-2023 a las 17:16:36
 -- Versión del servidor: 8.0.32
 -- Versión de PHP: 8.1.16
 
@@ -116,7 +116,7 @@ CREATE TABLE `Encuesta` (
   `id_curso` int NOT NULL,
   `matricula_alumno` int NOT NULL,
   `id_cuestionario_ad` int NOT NULL,
-  `estado` int DEFAULT NULL
+  `estatus` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
@@ -151,7 +151,7 @@ CREATE TABLE `Materia` (
 
 CREATE TABLE `Periodo` (
   `id_periodo` int NOT NULL,
-  `Estado` int DEFAULT NULL
+  `Estatus` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
@@ -297,8 +297,8 @@ ALTER TABLE `Periodo`
 -- Indices de la tabla `Pregunta`
 --
 ALTER TABLE `Pregunta`
-  ADD PRIMARY KEY (`id_pregunta`),
-  ADD KEY `fk_Pregunta_CuestionarioAlumnoDocente1` (`id_cuestionario_ad`);
+  ADD PRIMARY KEY (`id_pregunta`,`id_cuestionario_ad`),
+  ADD KEY `fk_Pregunta_CuestionarioAlumnoDocente1_idx` (`id_cuestionario_ad`);
 
 --
 -- Indices de la tabla `Respuesta`
@@ -311,6 +311,30 @@ ALTER TABLE `Respuesta`
 --
 -- AUTO_INCREMENT de las tablas volcadas
 --
+
+--
+-- AUTO_INCREMENT de la tabla `Carrera`
+--
+ALTER TABLE `Carrera`
+  MODIFY `id_carrera` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `Curso`
+--
+ALTER TABLE `Curso`
+  MODIFY `id_curso` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `Grupo`
+--
+ALTER TABLE `Grupo`
+  MODIFY `id_grupo` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `Materia`
+--
+ALTER TABLE `Materia`
+  MODIFY `id_materia` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `Pregunta`
@@ -357,6 +381,14 @@ ALTER TABLE `Grupo`
 --
 ALTER TABLE `Pregunta`
   ADD CONSTRAINT `fk_Pregunta_CuestionarioAlumnoDocente1` FOREIGN KEY (`id_cuestionario_ad`) REFERENCES `CuestionarioAlumnoDocente` (`id_cuestionario_ad`);
+
+--
+-- Filtros para la tabla `Respuesta`
+--
+ALTER TABLE `Respuesta`
+  ADD CONSTRAINT `fk_Respuesta_CuestionarioAlumnoDocente1` FOREIGN KEY (`id_cuestionario_ad`) REFERENCES `CuestionarioAlumnoDocente` (`id_cuestionario_ad`),
+  ADD CONSTRAINT `fk_Respuesta_Encuesta3` FOREIGN KEY (`id_encuesta`) REFERENCES `Encuesta` (`id_encuesta`),
+  ADD CONSTRAINT `fk_Respuesta_Pregunta2` FOREIGN KEY (`id_pregunta`) REFERENCES `Pregunta` (`id_pregunta`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
