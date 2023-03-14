@@ -1,9 +1,31 @@
-
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Servidor: mysql
+-- Tiempo de generación: 14-03-2023 a las 03:04:41
+-- Versión del servidor: 8.0.32
+-- Versión de PHP: 8.1.16
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Base de datos: `evalua_i`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `Alumno`
+--
 
 CREATE TABLE `Alumno` (
   `matricula` int NOT NULL,
@@ -12,7 +34,11 @@ CREATE TABLE `Alumno` (
   `apellido_paterno` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
+-- --------------------------------------------------------
 
+--
+-- Estructura de tabla para la tabla `Carrera`
+--
 
 CREATE TABLE `Carrera` (
   `id_carrera` int NOT NULL,
@@ -21,14 +47,26 @@ CREATE TABLE `Carrera` (
   `correo_institucional` varchar(120) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
+-- --------------------------------------------------------
 
-
+--
+-- Estructura de tabla para la tabla `CuestionarioAlumnoDocente`
+--
 
 CREATE TABLE `CuestionarioAlumnoDocente` (
   `id_cuestionario_ad` int NOT NULL,
   `descripcion` varchar(60) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
+--
+-- Volcado de datos para la tabla `CuestionarioAlumnoDocente`
+--
+
+INSERT INTO `CuestionarioAlumnoDocente` (`id_cuestionario_ad`, `descripcion`) VALUES
+(1, 'Cuestionario v1 2022'),
+(2, 'Cuestionario v2 2022');
+
+-- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `Curso`
@@ -42,8 +80,6 @@ CREATE TABLE `Curso` (
   `id_docente` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
-
-
 -- --------------------------------------------------------
 
 --
@@ -55,7 +91,7 @@ CREATE TABLE `Curso_has_Alumno` (
   `matricula` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
-
+-- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `Docente`
@@ -69,7 +105,7 @@ CREATE TABLE `Docente` (
   `correo` varchar(120) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
-
+-- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `Encuesta`
@@ -83,7 +119,7 @@ CREATE TABLE `Encuesta` (
   `estado` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
-
+-- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `Grupo`
@@ -95,18 +131,19 @@ CREATE TABLE `Grupo` (
   `id_carrera` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
-
+-- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `Materia`
 --
 
 CREATE TABLE `Materia` (
-  `id_materia` int NOT NULL ,
+  `id_materia` int NOT NULL,
   `nombre_materia` varchar(60) DEFAULT NULL,
   `nombre_corto_materia` varchar(45) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
+-- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `Periodo`
@@ -117,19 +154,59 @@ CREATE TABLE `Periodo` (
   `Estado` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
-
+-- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `Pregunta`
 --
 
 CREATE TABLE `Pregunta` (
-  `id_pregunta` int NOT NULL ,
+  `id_pregunta` int NOT NULL,
   `id_cuestionario_ad` int NOT NULL,
   `pregunta` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
+--
+-- Volcado de datos para la tabla `Pregunta`
+--
 
+INSERT INTO `Pregunta` (`id_pregunta`, `id_cuestionario_ad`, `pregunta`) VALUES
+(1, 2, 'El o la docente al inicio del cuatrimestre, dio a conocer: los objetivos de aprendizaje y programa de asignatura'),
+(2, 2, 'El o la docente al inicio del cuatrimestre, dio a conocer: los criterios y periodos de evaluación'),
+(3, 2, 'El o la docente al inicio del cuatrimestre, dio a conocer: la metodología de trabajo'),
+(4, 2, 'El o la docente al inicio del cuatrimestre, dio a conocer: las referencias o bibliografía actualizada'),
+(5, 2, 'El o la docente al inicio del cuatrimestre, dio a conocer: Realizó algún cuestionario de conocimientos generales de su asignatura'),
+(6, 2, 'El o la docente al inicio del cuatrimestre, dio a conocer: Dialogó los acuerdos o reglas del aula'),
+(7, 2, 'Enseña el 200% los contenidos de la asignatura durante todo el cuatrimestre'),
+(8, 2, 'Vincula el contenido nuevo con temas ya vistos'),
+(9, 2, 'Promueve actividades prácticas como: laboratorio, taller, visitas de estudio, reflexión de situaciones de la vida real, casos, etc.  vinculada a la teoría de la asignatura'),
+(10, 2, 'Promueve diversas formas de aprendizaje como trabajo en equipo y/o de manera individual'),
+(11, 2, 'Emplea diversos materiales para explicar los temas como: presentaciones, esquemas, vídeos, ejemplos, películas, juegos ya sean físicos o digitales'),
+(12, 2, 'Los materiales de clase son adaptados o creados correctamente y están relacionados con la asignatura'),
+(13, 2, 'Emplea las TIC en su clase como: presentaciones, juegos, demos, programas, audios, foros, información veraz y verificada de internet'),
+(14, 2, 'Emplea la plataforma educativa o el SIE para brindar seguimiento'),
+(15, 2, 'Explica de manera clara los temas de la asignatura'),
+(16, 2, 'Mantiene el interés y motivación de la clase'),
+(17, 2, 'Promueve la participación reflexiva'),
+(18, 2, 'Ayuda al repaso de temas ya vistos en clase'),
+(19, 2, 'Se asegura que la mayoría del grupo haya entendido los temas'),
+(20, 2, 'Considera la situación económica del alumnado en la solicitud de materiales para actividades'),
+(21, 2, 'Lleva a cabo diversas técnicas para evaluar como: casos, exámenes, retos, proyectos, ensayos, etc.'),
+(22, 2, 'Realiza comentarios a las evidencias solicitadas que ayudan a la mejora de forma individual'),
+(23, 2, 'Presenta los indicadores de cómo se calificarán las actividades asignadas'),
+(24, 2, 'Existe congruencia entre los temas vistos y evaluados en clases'),
+(25, 2, 'Entrega calificaciones parciales en el SIE de la Universidad'),
+(26, 2, 'Califica de manera justa de acuerdo con evidencias presentadas por las y los compañeros de clase'),
+(27, 2, 'Las normas de convivencia de la clase se basan en los valores de la Universidad'),
+(28, 2, 'Mantiene el comunicación positiva y constante con el grupo'),
+(29, 2, 'Promueve la práctica de la diversidad de ideas, creencias, valores y cultura'),
+(30, 2, 'Promueve el diálogo basado en el respeto, tolerancia, responsabilidad y armonía'),
+(31, 2, 'Promueve el cuidado de las instalaciones: limpieza, orden y medio ambiente'),
+(32, 2, 'Respeta su horario de clase'),
+(33, 2, 'Llega puntual y asiste al menos al 90% de las sesiones'),
+(34, 2, '¿Cómo calificarías el desempeño de tu docente frente al grupo?');
+
+-- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `Respuesta`
@@ -142,8 +219,9 @@ CREATE TABLE `Respuesta` (
   `puntuacion` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
-
-
+--
+-- Índices para tablas volcadas
+--
 
 --
 -- Indices de la tabla `Alumno`
@@ -219,8 +297,8 @@ ALTER TABLE `Periodo`
 -- Indices de la tabla `Pregunta`
 --
 ALTER TABLE `Pregunta`
-  ADD PRIMARY KEY (`id_pregunta`,`id_cuestionario_ad`),
-  ADD KEY `fk_Pregunta_CuestionarioAlumnoDocente1_idx` (`id_cuestionario_ad`);
+  ADD PRIMARY KEY (`id_pregunta`),
+  ADD KEY `fk_Pregunta_CuestionarioAlumnoDocente1` (`id_cuestionario_ad`);
 
 --
 -- Indices de la tabla `Respuesta`
@@ -230,6 +308,19 @@ ALTER TABLE `Respuesta`
   ADD KEY `fk_Respuesta_Pregunta2` (`id_pregunta`),
   ADD KEY `fk_Respuesta_Encuesta3` (`id_encuesta`);
 
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `Pregunta`
+--
+ALTER TABLE `Pregunta`
+  MODIFY `id_pregunta` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+
+--
+-- Restricciones para tablas volcadas
+--
 
 --
 -- Filtros para la tabla `Curso`
@@ -266,13 +357,8 @@ ALTER TABLE `Grupo`
 --
 ALTER TABLE `Pregunta`
   ADD CONSTRAINT `fk_Pregunta_CuestionarioAlumnoDocente1` FOREIGN KEY (`id_cuestionario_ad`) REFERENCES `CuestionarioAlumnoDocente` (`id_cuestionario_ad`);
-
---
--- Filtros para la tabla `Respuesta`
---
-ALTER TABLE `Respuesta`
-  ADD CONSTRAINT `fk_Respuesta_CuestionarioAlumnoDocente1` FOREIGN KEY (`id_cuestionario_ad`) REFERENCES `CuestionarioAlumnoDocente` (`id_cuestionario_ad`),
-  ADD CONSTRAINT `fk_Respuesta_Encuesta3` FOREIGN KEY (`id_encuesta`) REFERENCES `Encuesta` (`id_encuesta`),
-  ADD CONSTRAINT `fk_Respuesta_Pregunta2` FOREIGN KEY (`id_pregunta`) REFERENCES `Pregunta` (`id_pregunta`);
 COMMIT;
 
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
