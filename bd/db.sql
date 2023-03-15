@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: mysql
--- Tiempo de generación: 15-03-2023 a las 16:19:49
+-- Tiempo de generación: 15-03-2023 a las 16:24:26
 -- Versión del servidor: 8.0.32
 -- Versión de PHP: 8.1.16
 
@@ -224,6 +224,17 @@ CREATE TABLE `Curso` (
   `id_docente` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
+--
+-- Volcado de datos para la tabla `Curso`
+--
+
+INSERT INTO `Curso` (`id_curso`, `id_periodo`, `id_materia`, `id_grupo`, `id_docente`) VALUES
+(2, 3222, 1, 1, 2),
+(4, 3222, 1, 3, 1),
+(1, 3222, 2, 1, 1),
+(3, 3332, 2, 2, 1),
+(5, 3332, 3, 1, 2);
+
 -- --------------------------------------------------------
 
 --
@@ -234,6 +245,18 @@ CREATE TABLE `Curso_has_Alumno` (
   `id_curso` int NOT NULL,
   `matricula` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+--
+-- Volcado de datos para la tabla `Curso_has_Alumno`
+--
+
+INSERT INTO `Curso_has_Alumno` (`id_curso`, `matricula`) VALUES
+(5, 202000109),
+(4, 202000110),
+(3, 202000111),
+(1, 202000114),
+(5, 202000114),
+(2, 202000115);
 
 -- --------------------------------------------------------
 
@@ -271,6 +294,18 @@ CREATE TABLE `Encuesta` (
   `id_cuestionario_ad` int NOT NULL,
   `estado` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+--
+-- Volcado de datos para la tabla `Encuesta`
+--
+
+INSERT INTO `Encuesta` (`id_encuesta`, `id_curso`, `matricula_alumno`, `id_cuestionario_ad`, `estado`) VALUES
+(1, 1, 202000114, 1, 1),
+(2, 2, 202000115, 1, 1),
+(3, 3, 202000111, 1, 1),
+(4, 4, 202000110, 1, 1),
+(5, 5, 202000114, 1, 1),
+(6, 5, 202000109, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -352,8 +387,11 @@ CREATE TABLE `Pregunta` (
 INSERT INTO `Pregunta` (`id_pregunta`, `id_cuestionario_ad`, `pregunta`) VALUES
 (1, 2, 'El o la docente al inicio del cuatrimestre, dio a conocer: los objetivos de aprendizaje y programa de asignatura'),
 (2, 2, 'El o la docente al inicio del cuatrimestre, dio a conocer: los criterios y periodos de evaluación'),
+(3, 1, 'PREGUNTA 1'),
 (3, 2, 'El o la docente al inicio del cuatrimestre, dio a conocer: la metodología de trabajo'),
+(4, 1, 'PREGUNTA 2'),
 (4, 2, 'El o la docente al inicio del cuatrimestre, dio a conocer: las referencias o bibliografía actualizada'),
+(5, 1, 'PREGUNTA 3'),
 (5, 2, 'El o la docente al inicio del cuatrimestre, dio a conocer: Realizó algún cuestionario de conocimientos generales de su asignatura'),
 (6, 2, 'El o la docente al inicio del cuatrimestre, dio a conocer: Dialogó los acuerdos o reglas del aula'),
 (7, 2, 'Enseña el 200% los contenidos de la asignatura durante todo el cuatrimestre'),
@@ -397,6 +435,27 @@ CREATE TABLE `Respuesta` (
   `id_cuestionario_ad` int NOT NULL,
   `puntuacion` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+--
+-- Volcado de datos para la tabla `Respuesta`
+--
+
+INSERT INTO `Respuesta` (`id_encuesta`, `id_pregunta`, `id_cuestionario_ad`, `puntuacion`) VALUES
+(1, 3, 1, 4),
+(1, 4, 1, 4),
+(2, 3, 1, 2),
+(2, 4, 1, 2),
+(3, 3, 1, 4),
+(3, 4, 1, 4),
+(3, 5, 1, 4),
+(4, 3, 1, 1),
+(4, 4, 1, 2),
+(1, 3, 1, 3),
+(1, 4, 1, 3),
+(5, 3, 1, 3),
+(5, 4, 1, 2),
+(6, 3, 1, 4),
+(6, 4, 1, 4);
 
 --
 -- Índices para tablas volcadas
