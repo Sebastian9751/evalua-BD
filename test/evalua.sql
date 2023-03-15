@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 15-03-2023 a las 01:40:29
+-- Tiempo de generación: 15-03-2023 a las 06:39:16
 -- Versión del servidor: 5.5.68-MariaDB
 -- Versión de PHP: 8.1.12
 
@@ -482,6 +482,12 @@ ALTER TABLE `Carrera`
 --
 ALTER TABLE `Curso`
   MODIFY `id_curso` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `Encuesta`
+--
+ALTER TABLE `Encuesta`
+  MODIFY `id_encuesta` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `Grupo`
