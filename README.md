@@ -92,5 +92,5 @@
 
 #### Guardar las respuestas
 
-   CALL   saveAnswer ({idEncuesta}, {idPregunta}, {idCuestionarioAd}, {valor})
+      CALL   saveAnswer ({idEncuesta}, {idPregunta}, {idCuestionarioAd}, {valor})
    
