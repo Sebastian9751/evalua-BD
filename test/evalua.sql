@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 14-03-2023 a las 22:06:57
+-- Tiempo de generación: 15-03-2023 a las 01:40:29
 -- Versión del servidor: 5.5.68-MariaDB
 -- Versión de PHP: 8.1.12
 
@@ -233,7 +233,8 @@ CREATE TABLE `Docente` (
   `nombre` varchar(60) DEFAULT NULL,
   `apellido_materno` varchar(50) DEFAULT NULL,
   `apellido_paterno` varchar(50) DEFAULT NULL,
-  `correo` varchar(120) DEFAULT NULL
+  `correo` varchar(120) DEFAULT NULL,
+  `id_tipo` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -350,6 +351,26 @@ CREATE TABLE `Respuesta` (
   `puntuacion` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tipo_docente`
+--
+
+CREATE TABLE `tipo_docente` (
+  `id_tipo` int(11) NOT NULL,
+  `clave_tipo` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `descripcion` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `tipo_docente`
+--
+
+INSERT INTO `tipo_docente` (`id_tipo`, `clave_tipo`, `descripcion`) VALUES
+(1, 'PA', 'Profesor de asignatura'),
+(2, 'PCT', 'Profesor de tiempo completo');
+
 --
 -- Índices para tablas volcadas
 --
@@ -394,7 +415,8 @@ ALTER TABLE `Curso_has_Alumno`
 -- Indices de la tabla `Docente`
 --
 ALTER TABLE `Docente`
-  ADD PRIMARY KEY (`id_docente`);
+  ADD PRIMARY KEY (`id_docente`),
+  ADD KEY `id_tipo` (`id_tipo`);
 
 --
 -- Indices de la tabla `Encuesta`
@@ -440,6 +462,12 @@ ALTER TABLE `Respuesta`
   ADD KEY `fk_Respuesta_Encuesta3` (`id_encuesta`);
 
 --
+-- Indices de la tabla `tipo_docente`
+--
+ALTER TABLE `tipo_docente`
+  ADD PRIMARY KEY (`id_tipo`);
+
+--
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
@@ -474,6 +502,12 @@ ALTER TABLE `Pregunta`
   MODIFY `id_pregunta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
+-- AUTO_INCREMENT de la tabla `tipo_docente`
+--
+ALTER TABLE `tipo_docente`
+  MODIFY `id_tipo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- Restricciones para tablas volcadas
 --
 
@@ -492,6 +526,12 @@ ALTER TABLE `Curso`
 ALTER TABLE `Curso_has_Alumno`
   ADD CONSTRAINT `fk_Curso_has_Alumno_Alumno1` FOREIGN KEY (`matricula`) REFERENCES `Alumno` (`matricula`),
   ADD CONSTRAINT `fk_Curso_has_Alumno_Curso1` FOREIGN KEY (`id_curso`) REFERENCES `Curso` (`id_curso`);
+
+--
+-- Filtros para la tabla `Docente`
+--
+ALTER TABLE `Docente`
+  ADD CONSTRAINT `Docente_ibfk_1` FOREIGN KEY (`id_tipo`) REFERENCES `tipo_docente` (`id_tipo`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `Encuesta`
