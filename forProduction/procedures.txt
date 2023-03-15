@@ -164,3 +164,18 @@ INNER JOIN Carrera ON Grupo.id_carrera =Carrera.id_carrera
 WHERE matricula = mt AND  Curso.id_periodo = Pe;
 END //
 DELIMITER ;
+
+#Preguntas
+
+
+DELIMITER //
+
+CREATE PROCEDURE getQuestionsByVersion(IN version int(10))
+BEGIN 
+
+SELECT * FROM Pregunta
+WHERE Pregunta.id_cuestionario_ad = version;
+
+END //
+
+DELIMITER ;
