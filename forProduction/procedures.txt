@@ -179,3 +179,12 @@ WHERE Pregunta.id_cuestionario_ad = version;
 END //
 
 DELIMITER ;
+
+
+# Respuestas
+
+DELIMITER //
+CREATE PROCEDURE `saveAnswer`(IN `idEncuesta` INT, IN `idPregunta` INT, IN `idCuestionarioAd` INT, IN `valor` INT)
+BEGIN
+    INSERT INTO Respuesta VALUES(idEncuesta, idPregunta, idCuestionarioAd, valor);
+END//
