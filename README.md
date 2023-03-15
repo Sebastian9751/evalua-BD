@@ -88,4 +88,9 @@
 #### Preguntas por vercion del cuestionario
 
       CALL getQuestionsByVersion({id})  ->donde "id" es el del cuestionario (2)
-      
+
+
+#### Guardar las respuestas
+
+   CALL   saveAnswer ({idEncuesta}, {idPregunta}, {idCuestionarioAd}, {valor})
+   
