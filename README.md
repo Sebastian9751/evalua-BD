@@ -87,5 +87,5 @@
 
 #### Preguntas por vercion del cuestionario
 
-      CALL getQuestionsByVersion({id})  ->donde "id" es el del custiorario (2)
+      CALL getQuestionsByVersion({id})  ->donde "id" es el del cuestionario (2)
       
