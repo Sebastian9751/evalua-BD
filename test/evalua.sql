@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 15-03-2023 a las 06:39:16
+-- Tiempo de generación: 15-03-2023 a las 06:43:53
 -- Versión del servidor: 5.5.68-MariaDB
 -- Versión de PHP: 8.1.12
 
@@ -236,6 +236,13 @@ CREATE TABLE `Docente` (
   `correo` varchar(120) DEFAULT NULL,
   `id_tipo` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `Docente`
+--
+
+INSERT INTO `Docente` (`id_docente`, `nombre`, `apellido_materno`, `apellido_paterno`, `correo`, `id_tipo`) VALUES
+(83, 'DOCENTE ', 'DOCENTE', 'DOCENTE', 'DOCENTE', 1);
 
 -- --------------------------------------------------------
 
