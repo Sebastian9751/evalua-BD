@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 15-03-2023 a las 16:29:38
+-- Tiempo de generación: 15-03-2023 a las 17:05:28
 -- Versión del servidor: 5.5.68-MariaDB
 -- Versión de PHP: 8.1.12
 
@@ -141,6 +141,10 @@ GROUP BY id_periodo, Grupo.clave_grupo, nombre_materia, nombre_carrera, Docente.
 
 
 
+END$$
+
+CREATE DEFINER=`SistemaEval`@`localhost` PROCEDURE `saveAnswer` (IN `idEncuesta` INT, IN `idPregunta` INT, IN `idCuestionarioAd` INT, IN `valor` INT)  BEGIN
+    INSERT INTO Respuesta VALUES(idEncuesta, idPregunta, idCuestionarioAd, valor);
 END$$
 
 DELIMITER ;
