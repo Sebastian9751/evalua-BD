@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: mysql
--- Tiempo de generación: 15-03-2023 a las 16:24:26
+-- Tiempo de generación: 15-03-2023 a las 16:58:09
 -- Versión del servidor: 8.0.32
 -- Versión de PHP: 8.1.16
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `evalua_v2`
+-- Base de datos: `xsx`
 --
 
 DELIMITER $$
@@ -141,6 +141,10 @@ GROUP BY id_periodo, Grupo.clave_grupo, nombre_materia, nombre_carrera, Docente.
 
 
 
+END$$
+
+CREATE DEFINER=`root`@`%` PROCEDURE `saveAnswer` (IN `idEncuesta` INT, IN `idPregunta` INT, IN `idCuestionarioAd` INT, IN `valor` INT)   BEGIN
+    INSERT INTO Respuesta VALUES(idEncuesta, idPregunta, idCuestionarioAd, valor);
 END$$
 
 DELIMITER ;
@@ -305,7 +309,8 @@ INSERT INTO `Encuesta` (`id_encuesta`, `id_curso`, `matricula_alumno`, `id_cuest
 (3, 3, 202000111, 1, 1),
 (4, 4, 202000110, 1, 1),
 (5, 5, 202000114, 1, 1),
-(6, 5, 202000109, 1, 1);
+(6, 5, 202000109, 1, 1),
+(7, 2, 202000110, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -455,7 +460,8 @@ INSERT INTO `Respuesta` (`id_encuesta`, `id_pregunta`, `id_cuestionario_ad`, `pu
 (5, 3, 1, 3),
 (5, 4, 1, 2),
 (6, 3, 1, 4),
-(6, 4, 1, 4);
+(6, 4, 1, 4),
+(1, 1, 1, 1);
 
 --
 -- Índices para tablas volcadas
@@ -562,6 +568,12 @@ ALTER TABLE `Carrera`
 --
 ALTER TABLE `Curso`
   MODIFY `id_curso` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT de la tabla `Encuesta`
+--
+ALTER TABLE `Encuesta`
+  MODIFY `id_encuesta` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `Grupo`
