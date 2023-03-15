@@ -83,4 +83,9 @@
       - 202000114
       - 202000115      
 ###### Nota: la consulta puede devolver una query vacia, si solicitan datos que no existen 
+
+
+#### Preguntas por vercion del cuestionario
+
+      CALL getQuestionsByVersion({id})  ->donde "id" es el del custiorario (2)
       
