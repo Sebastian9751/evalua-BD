@@ -70,7 +70,7 @@
       2 = 28BII
       3 = 27BIOTEC
 
-#### Lista de profeosres por alumno (matricula)
+#### Lista de profesores por alumno (matricula)
 
       CALL getTeacherByStudent({matricula}, {periodo})      ->donde "matricula" es la del alumno y
       "perido" es el del cuatrimestre
