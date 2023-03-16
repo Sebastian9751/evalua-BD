@@ -70,7 +70,7 @@
       2 = 28BII
       3 = 27BIOTEC
 
-#### Lista de profesores por alumno (matricula)
+#### Lista de profeso ,res por alumno (matricula)
 
       CALL getTeacherByStudent({matricula} )      ->donde "matricula" es la del alumno 
       
@@ -84,9 +84,9 @@
 ###### Nota: la consulta puede devolver una query vacia, si solicitan datos que no existen 
 
 
-#### Preguntas por vercion del cuestionario
+#### Preguntas del cuestionario actual
 
-      CALL getQuestionsByVersion({id})  ->donde "id" es el del cuestionario (2)
+      CALL getCurrentQuestions()
 
 
 #### Guardar las respuestas
