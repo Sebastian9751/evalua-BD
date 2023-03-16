@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: mysql
--- Tiempo de generación: 15-03-2023 a las 16:58:09
+-- Tiempo de generación: 16-03-2023 a las 04:03:43
 -- Versión del servidor: 8.0.32
 -- Versión de PHP: 8.1.16
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `xsx`
+-- Base de datos: `evalua_v2`
 --
 
 DELIMITER $$
@@ -112,16 +112,29 @@ WHERE Grupo.id_grupo= idGroup;
 
 END$$
 
-CREATE DEFINER=`root`@`%` PROCEDURE `getTeacherByStudent` (IN `Mt` INT(9), IN `Pe` INT(4))   BEGIN
-SELECT Curso.id_periodo, Curso.id_curso, Materia.id_materia, Materia.nombre_materia,Grupo.clave_grupo, Materia.nombre_corto_materia, Docente.id_docente, Docente.nombre,Docente.apellido_materno, Docente.apellido_paterno,Carrera.nombre_carrera
-FROM Curso_has_Alumno 
-INNER JOIN Curso ON Curso_has_Alumno.id_curso= Curso.id_curso 
-INNER JOIN Materia ON Curso.id_materia
-INNER JOIN Docente ON Curso.id_docente= Docente.id_docente
-INNER JOIN Grupo ON Curso.id_grupo = Grupo.id_grupo
-INNER JOIN Carrera ON Grupo.id_carrera =Carrera.id_carrera
-
-WHERE matricula = mt AND  Curso.id_periodo = Pe;
+CREATE DEFINER=`root`@`%` PROCEDURE `getTeacherByStudent` (IN `Mt` INT(9))   BEGIN
+    SELECT 
+        Curso.id_periodo, 
+        Curso.id_curso, 
+        Materia.id_materia, 
+        Materia.nombre_materia,
+        Grupo.clave_grupo, 
+        Materia.nombre_corto_materia, 
+        Docente.id_docente, 
+        Docente.nombre,
+        Docente.apellido_materno, 
+        Docente.apellido_paterno,
+        Carrera.nombre_carrera
+    FROM 
+        Curso_has_Alumno 
+        INNER JOIN Curso ON Curso_has_Alumno.id_curso = Curso.id_curso 
+        INNER JOIN Materia ON Curso.id_materia = Materia.id_materia
+        INNER JOIN Docente ON Curso.id_docente = Docente.id_docente
+        INNER JOIN Grupo ON Curso.id_grupo = Grupo.id_grupo
+        INNER JOIN Carrera ON Grupo.id_carrera = Carrera.id_carrera
+    WHERE 
+        Curso_has_Alumno.matricula = Mt 
+        AND Curso.id_periodo = (SELECT id_periodo FROM Periodo WHERE Estado = 1);
 END$$
 
 CREATE DEFINER=`root`@`%` PROCEDURE `getTeachersAverageByPeriod` (IN `idPeriod` INT(4))   BEGIN
@@ -309,8 +322,7 @@ INSERT INTO `Encuesta` (`id_encuesta`, `id_curso`, `matricula_alumno`, `id_cuest
 (3, 3, 202000111, 1, 1),
 (4, 4, 202000110, 1, 1),
 (5, 5, 202000114, 1, 1),
-(6, 5, 202000109, 1, 1),
-(7, 2, 202000110, 2, 1);
+(6, 5, 202000109, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -370,7 +382,7 @@ CREATE TABLE `Periodo` (
 --
 
 INSERT INTO `Periodo` (`id_periodo`, `Estado`) VALUES
-(3222, 0),
+(3222, 1),
 (3332, 0);
 
 -- --------------------------------------------------------
@@ -568,12 +580,6 @@ ALTER TABLE `Carrera`
 --
 ALTER TABLE `Curso`
   MODIFY `id_curso` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT de la tabla `Encuesta`
---
-ALTER TABLE `Encuesta`
-  MODIFY `id_encuesta` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `Grupo`

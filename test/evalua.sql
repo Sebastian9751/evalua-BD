@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 15-03-2023 a las 17:05:28
+-- Tiempo de generación: 16-03-2023 a las 04:01:19
 -- Versión del servidor: 5.5.68-MariaDB
 -- Versión de PHP: 8.1.12
 
@@ -112,16 +112,29 @@ WHERE Grupo.id_grupo= idGroup;
 
 END$$
 
-CREATE DEFINER=`SistemaEval`@`localhost` PROCEDURE `getTeacherByStudent` (IN `Mt` INT(9), IN `Pe` INT(4))  BEGIN
-SELECT Curso.id_periodo, Curso.id_curso, Materia.id_materia, Materia.nombre_materia,Grupo.clave_grupo, Materia.nombre_corto_materia, Docente.id_docente, Docente.nombre,Docente.apellido_materno, Docente.apellido_paterno,Carrera.nombre_carrera
-FROM Curso_has_Alumno 
-INNER JOIN Curso ON Curso_has_Alumno.id_curso= Curso.id_curso 
-INNER JOIN Materia ON Curso.id_materia
-INNER JOIN Docente ON Curso.id_docente= Docente.id_docente
-INNER JOIN Grupo ON Curso.id_grupo = Grupo.id_grupo
-INNER JOIN Carrera ON Grupo.id_carrera =Carrera.id_carrera
-
-WHERE matricula = mt AND  Curso.id_periodo = Pe;
+CREATE DEFINER=`SistemaEval`@`localhost` PROCEDURE `getTeacherByStudent` (IN `Mt` INT(9))  BEGIN
+    SELECT 
+        Curso.id_periodo, 
+        Curso.id_curso, 
+        Materia.id_materia, 
+        Materia.nombre_materia,
+        Grupo.clave_grupo, 
+        Materia.nombre_corto_materia, 
+        Docente.id_docente, 
+        Docente.nombre,
+        Docente.apellido_materno, 
+        Docente.apellido_paterno,
+        Carrera.nombre_carrera
+    FROM 
+        Curso_has_Alumno 
+        INNER JOIN Curso ON Curso_has_Alumno.id_curso = Curso.id_curso 
+        INNER JOIN Materia ON Curso.id_materia = Materia.id_materia
+        INNER JOIN Docente ON Curso.id_docente = Docente.id_docente
+        INNER JOIN Grupo ON Curso.id_grupo = Grupo.id_grupo
+        INNER JOIN Carrera ON Grupo.id_carrera = Carrera.id_carrera
+    WHERE 
+        Curso_has_Alumno.matricula = Mt 
+        AND Curso.id_periodo = (SELECT id_periodo FROM Periodo WHERE Estado = 1);
 END$$
 
 CREATE DEFINER=`SistemaEval`@`localhost` PROCEDURE `getTeachersAverageByPeriod` (IN `idPeriod` INT(4))  BEGIN
@@ -247,13 +260,6 @@ CREATE TABLE `Docente` (
   `correo` varchar(120) DEFAULT NULL,
   `id_tipo` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Volcado de datos para la tabla `Docente`
---
-
-INSERT INTO `Docente` (`id_docente`, `nombre`, `apellido_materno`, `apellido_paterno`, `correo`, `id_tipo`) VALUES
-(83, 'DOCENTE ', 'DOCENTE', 'DOCENTE', 'DOCENTE', 1);
 
 -- --------------------------------------------------------
 
