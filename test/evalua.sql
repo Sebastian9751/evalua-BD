@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 16-03-2023 a las 04:01:19
+-- Tiempo de generación: 16-03-2023 a las 23:03:06
 -- Versión del servidor: 5.5.68-MariaDB
 -- Versión de PHP: 8.1.12
 
@@ -75,6 +75,12 @@ GROUP BY  Pregunta.id_pregunta, Pregunta.pregunta, Pregunta.id_cuestionario_ad, 
 
  END$$
 
+CREATE DEFINER=`SistemaEval`@`localhost` PROCEDURE `getCurrentQuestions` ()  BEGIN
+SELECT * FROM Pregunta
+WHERE Pregunta.id_cuestionario_ad = (SELECT MAX(id_cuestionario_ad) FROM Pregunta );
+
+END$$
+
 CREATE DEFINER=`SistemaEval`@`localhost` PROCEDURE `getGroupsByTeacher` (IN `idDoc` INT(10), IN `idCarr` INT(10))  BEGIN
 
 SELECT Docente.id_docente, id_periodo, Grupo.clave_grupo,nombre_materia, Docente.nombre,Docente.apellido_materno, Docente.apellido_paterno, AVG(Respuesta.puntuacion) AS promedio_puntuacion
@@ -90,13 +96,6 @@ INNER JOIN Pregunta ON Respuesta.id_pregunta = Pregunta.id_pregunta
 WHERE Docente.id_docente = idDoc AND Carrera.id_carrera = idCarr 
 
 GROUP BY id_periodo,Grupo.clave_grupo, Docente.id_docente, nombre_materia, Docente.nombre, Docente.apellido_materno, Docente.apellido_paterno;
-
-END$$
-
-CREATE DEFINER=`SistemaEval`@`localhost` PROCEDURE `getQuestionsByVersion` (IN `version` INT(10))  BEGIN 
-
-SELECT * FROM Pregunta
-WHERE Pregunta.id_cuestionario_ad = version;
 
 END$$
 
