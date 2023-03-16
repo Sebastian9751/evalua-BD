@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 16-03-2023 a las 23:03:06
+-- Tiempo de generación: 16-03-2023 a las 23:21:07
 -- Versión del servidor: 5.5.68-MariaDB
 -- Versión de PHP: 8.1.12
 
@@ -193,13 +193,13 @@ CREATE TABLE `Carrera` (
 --
 
 INSERT INTO `Carrera` (`id_carrera`, `nombre_carrera`, `nombre_corto`, `correo_institucional`, `status`) VALUES
-(1, 'INGENIERIA EN BIOTECNOLOGIA', 'ING. BIOTECNOLOGIA', '@miuniversidad.edu', 1),
-(2, 'INGENIERIA EN SOFTWARE', 'ING. SOFTWARE', '@miuniversidad.edu', 1),
-(3, 'INGENIERIA FINANCIERA', 'ING. FINANCIERA', '@miuniversidad.edu', 1),
-(4, 'LICENCIATURA EN ADMINISTRACIÓN Y GESTIÓN EMPRESARIAL ', 'LIC. GES.Y PYMES', '@miuniversidad.edu', 0),
-(5, 'LICENCIATURA EN TERAPIA FISICA', 'LIC. TERAPIA FISICA', '@miuniversidad.edu', 1),
-(6, 'INGENIERIA EN BIOMÉDICA', 'ING. BIOMEDICA', '@miuniversidad.edu', 1),
-(7, 'LICENCIATURA ADMINISTRACION Y GESTION DE PYMES', 'LAGE', '@miuniversidad.edu', 1);
+(1, 'INGENIERIA EN BIOTECNOLOGIA', 'ING. BIOTECNOLOGIA', 'ing.biotecnologia@upqroo.edu.mx', 1),
+(2, 'INGENIERIA EN SOFTWARE', 'ING. SOFTWARE', 'ing.software@upqroo.edu.mx', 1),
+(3, 'INGENIERIA FINANCIERA', 'ING. FINANCIERA', 'ing.financiera@upqroo.edu.mx', 1),
+(4, 'LICENCIATURA EN ADMINISTRACIÓN Y GESTIÓN EMPRESARIAL ', 'LIC. GES.Y PYMES', 'lic.gestion@upqroo.edu.mx', 0),
+(5, 'LICENCIATURA EN TERAPIA FISICA', 'LIC. TERAPIA FISICA', 'lic.terapiafisica@upqroo.edu.mx', 1),
+(6, 'INGENIERIA EN BIOMÉDICA', 'ING. BIOMEDICA', 'ing.biomedica@upqroo.edu.mx', 1),
+(7, 'LICENCIATURA ADMINISTRACION Y GESTION DE PYMES', 'LAGE', 'lic.gestion@upqroo.edu.mx', 1);
 
 -- --------------------------------------------------------
 
@@ -259,6 +259,13 @@ CREATE TABLE `Docente` (
   `correo` varchar(120) DEFAULT NULL,
   `id_tipo` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `Docente`
+--
+
+INSERT INTO `Docente` (`id_docente`, `nombre`, `apellido_materno`, `apellido_paterno`, `correo`, `id_tipo`) VALUES
+(83, 'DOCENTE ', 'DOC', 'DOCENTE', '@DOC', 1);
 
 -- --------------------------------------------------------
 
