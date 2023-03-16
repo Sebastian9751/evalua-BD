@@ -183,15 +183,14 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE PROCEDURE getQuestionsByVersion(IN version int(10))
-BEGIN 
-
+CREATE PROCEDURE getCurrentQuestions()
+BEGIN
 SELECT * FROM Pregunta
-WHERE Pregunta.id_cuestionario_ad = version;
+WHERE Pregunta.id_cuestionario_ad = (SELECT MAX(id_cuestionario_ad) FROM Pregunta );
 
 END //
 
-DELIMITER ;
+DELIMITER ; 
 
 
 # Respuestas
