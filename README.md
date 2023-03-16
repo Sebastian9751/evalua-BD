@@ -72,13 +72,12 @@
 
 #### Lista de profesores por alumno (matricula)
 
-      CALL getTeacherByStudent({matricula}, {periodo})      ->donde "matricula" es la del alumno y
-      "perido" es el del cuatrimestre
+      CALL getTeacherByStudent({matricula} )      ->donde "matricula" es la del alumno 
       
-      Matriculas              #Periodos 
+      Matriculas               
     
-      - 202000109             - 3222
-      - 202000110             - 3332                        
+      - 202000109             
+      - 202000110                                     
       - 202000111
       - 202000114
       - 202000115      
