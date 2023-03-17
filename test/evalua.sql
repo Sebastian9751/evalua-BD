@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 16-03-2023 a las 04:01:19
+-- Tiempo de generación: 17-03-2023 a las 16:53:50
 -- Versión del servidor: 5.5.68-MariaDB
 -- Versión de PHP: 8.1.12
 
@@ -75,6 +75,12 @@ GROUP BY  Pregunta.id_pregunta, Pregunta.pregunta, Pregunta.id_cuestionario_ad, 
 
  END$$
 
+CREATE DEFINER=`SistemaEval`@`localhost` PROCEDURE `getCurrentQuestions` ()  BEGIN
+SELECT * FROM Pregunta
+WHERE Pregunta.id_cuestionario_ad = (SELECT MAX(id_cuestionario_ad) FROM Pregunta );
+
+END$$
+
 CREATE DEFINER=`SistemaEval`@`localhost` PROCEDURE `getGroupsByTeacher` (IN `idDoc` INT(10), IN `idCarr` INT(10))  BEGIN
 
 SELECT Docente.id_docente, id_periodo, Grupo.clave_grupo,nombre_materia, Docente.nombre,Docente.apellido_materno, Docente.apellido_paterno, AVG(Respuesta.puntuacion) AS promedio_puntuacion
@@ -93,13 +99,6 @@ GROUP BY id_periodo,Grupo.clave_grupo, Docente.id_docente, nombre_materia, Docen
 
 END$$
 
-CREATE DEFINER=`SistemaEval`@`localhost` PROCEDURE `getQuestionsByVersion` (IN `version` INT(10))  BEGIN 
-
-SELECT * FROM Pregunta
-WHERE Pregunta.id_cuestionario_ad = version;
-
-END$$
-
 CREATE DEFINER=`SistemaEval`@`localhost` PROCEDURE `getStudentsByGroup` (IN `idGroup` INT(10))  BEGIN
 SELECT id_periodo, nombre_carrera, clave_grupo, matricula_alumno, nombre, apellido_materno, apellido_paterno 
 FROM Encuesta 
@@ -113,7 +112,7 @@ WHERE Grupo.id_grupo= idGroup;
 END$$
 
 CREATE DEFINER=`SistemaEval`@`localhost` PROCEDURE `getTeacherByStudent` (IN `Mt` INT(9))  BEGIN
-    SELECT 
+ SELECT 
         Curso.id_periodo, 
         Curso.id_curso, 
         Materia.id_materia, 
@@ -124,7 +123,8 @@ CREATE DEFINER=`SistemaEval`@`localhost` PROCEDURE `getTeacherByStudent` (IN `Mt
         Docente.nombre,
         Docente.apellido_materno, 
         Docente.apellido_paterno,
-        Carrera.nombre_carrera
+        Carrera.nombre_carrera, Encuesta.id_encuesta
+        
     FROM 
         Curso_has_Alumno 
         INNER JOIN Curso ON Curso_has_Alumno.id_curso = Curso.id_curso 
@@ -132,10 +132,12 @@ CREATE DEFINER=`SistemaEval`@`localhost` PROCEDURE `getTeacherByStudent` (IN `Mt
         INNER JOIN Docente ON Curso.id_docente = Docente.id_docente
         INNER JOIN Grupo ON Curso.id_grupo = Grupo.id_grupo
         INNER JOIN Carrera ON Grupo.id_carrera = Carrera.id_carrera
+        INNER JOIN Encuesta ON Curso_has_Alumno.matricula = Encuesta.matricula_alumno
     WHERE 
-        Curso_has_Alumno.matricula = Mt 
+        Curso_has_Alumno.matricula = Mt
         AND Curso.id_periodo = (SELECT id_periodo FROM Periodo WHERE Estado = 1);
-END$$
+                                     
+     END$$
 
 CREATE DEFINER=`SistemaEval`@`localhost` PROCEDURE `getTeachersAverageByPeriod` (IN `idPeriod` INT(4))  BEGIN
 SELECT id_periodo, Grupo.clave_grupo,nombre_materia,nombre_carrera, Docente.nombre,Docente.apellido_materno, Docente.apellido_paterno ,AVG(Respuesta.puntuacion) AS promedio_puntuacion
@@ -194,13 +196,13 @@ CREATE TABLE `Carrera` (
 --
 
 INSERT INTO `Carrera` (`id_carrera`, `nombre_carrera`, `nombre_corto`, `correo_institucional`, `status`) VALUES
-(1, 'INGENIERIA EN BIOTECNOLOGIA', 'ING. BIOTECNOLOGIA', '@miuniversidad.edu', 1),
-(2, 'INGENIERIA EN SOFTWARE', 'ING. SOFTWARE', '@miuniversidad.edu', 1),
-(3, 'INGENIERIA FINANCIERA', 'ING. FINANCIERA', '@miuniversidad.edu', 1),
-(4, 'LICENCIATURA EN ADMINISTRACIÓN Y GESTIÓN EMPRESARIAL ', 'LIC. GES.Y PYMES', '@miuniversidad.edu', 0),
-(5, 'LICENCIATURA EN TERAPIA FISICA', 'LIC. TERAPIA FISICA', '@miuniversidad.edu', 1),
-(6, 'INGENIERIA EN BIOMÉDICA', 'ING. BIOMEDICA', '@miuniversidad.edu', 1),
-(7, 'LICENCIATURA ADMINISTRACION Y GESTION DE PYMES', 'LAGE', '@miuniversidad.edu', 1);
+(1, 'INGENIERIA EN BIOTECNOLOGIA', 'ING. BIOTECNOLOGIA', 'ing.biotecnologia@upqroo.edu.mx', 1),
+(2, 'INGENIERIA EN SOFTWARE', 'ING. SOFTWARE', 'ing.software@upqroo.edu.mx', 1),
+(3, 'INGENIERIA FINANCIERA', 'ING. FINANCIERA', 'ing.financiera@upqroo.edu.mx', 1),
+(4, 'LICENCIATURA EN ADMINISTRACIÓN Y GESTIÓN EMPRESARIAL ', 'LIC. GES.Y PYMES', 'lic.gestion@upqroo.edu.mx', 0),
+(5, 'LICENCIATURA EN TERAPIA FISICA', 'LIC. TERAPIA FISICA', 'lic.terapiafisica@upqroo.edu.mx', 1),
+(6, 'INGENIERIA EN BIOMÉDICA', 'ING. BIOMEDICA', 'ing.biomedica@upqroo.edu.mx', 1),
+(7, 'LICENCIATURA ADMINISTRACION Y GESTION DE PYMES', 'LAGE', 'lic.gestion@upqroo.edu.mx', 1);
 
 -- --------------------------------------------------------
 
@@ -261,6 +263,13 @@ CREATE TABLE `Docente` (
   `id_tipo` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Volcado de datos para la tabla `Docente`
+--
+
+INSERT INTO `Docente` (`id_docente`, `nombre`, `apellido_materno`, `apellido_paterno`, `correo`, `id_tipo`) VALUES
+(83, 'DOCENTE ', 'DOC', 'DOCENTE', '@DOC', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -307,7 +316,7 @@ CREATE TABLE `Materia` (
 
 CREATE TABLE `Periodo` (
   `id_periodo` int(11) NOT NULL,
-  `Estatus` int(11) DEFAULT NULL
+  `Estado` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------

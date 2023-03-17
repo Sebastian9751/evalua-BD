@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: mysql
--- Tiempo de generación: 16-03-2023 a las 21:49:56
+-- Tiempo de generación: 17-03-2023 a las 17:00:29
 -- Versión del servidor: 8.0.32
 -- Versión de PHP: 8.1.16
 
@@ -112,7 +112,7 @@ WHERE Grupo.id_grupo= idGroup;
 END$$
 
 CREATE DEFINER=`root`@`%` PROCEDURE `getTeacherByStudent` (IN `Mt` INT(9))   BEGIN
-    SELECT 
+ SELECT 
         Curso.id_periodo, 
         Curso.id_curso, 
         Materia.id_materia, 
@@ -123,7 +123,8 @@ CREATE DEFINER=`root`@`%` PROCEDURE `getTeacherByStudent` (IN `Mt` INT(9))   BEG
         Docente.nombre,
         Docente.apellido_materno, 
         Docente.apellido_paterno,
-        Carrera.nombre_carrera
+        Carrera.nombre_carrera, Encuesta.id_encuesta
+        
     FROM 
         Curso_has_Alumno 
         INNER JOIN Curso ON Curso_has_Alumno.id_curso = Curso.id_curso 
@@ -131,10 +132,12 @@ CREATE DEFINER=`root`@`%` PROCEDURE `getTeacherByStudent` (IN `Mt` INT(9))   BEG
         INNER JOIN Docente ON Curso.id_docente = Docente.id_docente
         INNER JOIN Grupo ON Curso.id_grupo = Grupo.id_grupo
         INNER JOIN Carrera ON Grupo.id_carrera = Carrera.id_carrera
+        INNER JOIN Encuesta ON Curso_has_Alumno.matricula = Encuesta.matricula_alumno
     WHERE 
-        Curso_has_Alumno.matricula = Mt 
+        Curso_has_Alumno.matricula = Mt
         AND Curso.id_periodo = (SELECT id_periodo FROM Periodo WHERE Estado = 1);
-END$$
+                                     
+     END$$
 
 CREATE DEFINER=`root`@`%` PROCEDURE `getTeachersAverageByPeriod` (IN `idPeriod` INT(4))   BEGIN
 SELECT id_periodo, Grupo.clave_grupo,nombre_materia,nombre_carrera, Docente.nombre,Docente.apellido_materno, Docente.apellido_paterno ,AVG(Respuesta.puntuacion) AS promedio_puntuacion
