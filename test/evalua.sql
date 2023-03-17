@@ -112,7 +112,7 @@ WHERE Grupo.id_grupo= idGroup;
 END$$
 
 CREATE DEFINER=`SistemaEval`@`localhost` PROCEDURE `getTeacherByStudent` (IN `Mt` INT(9))  BEGIN
-    SELECT 
+ SELECT 
         Curso.id_periodo, 
         Curso.id_curso, 
         Materia.id_materia, 
@@ -123,7 +123,8 @@ CREATE DEFINER=`SistemaEval`@`localhost` PROCEDURE `getTeacherByStudent` (IN `Mt
         Docente.nombre,
         Docente.apellido_materno, 
         Docente.apellido_paterno,
-        Carrera.nombre_carrera
+        Carrera.nombre_carrera, Encuesta.id_encuesta
+        
     FROM 
         Curso_has_Alumno 
         INNER JOIN Curso ON Curso_has_Alumno.id_curso = Curso.id_curso 
@@ -131,10 +132,12 @@ CREATE DEFINER=`SistemaEval`@`localhost` PROCEDURE `getTeacherByStudent` (IN `Mt
         INNER JOIN Docente ON Curso.id_docente = Docente.id_docente
         INNER JOIN Grupo ON Curso.id_grupo = Grupo.id_grupo
         INNER JOIN Carrera ON Grupo.id_carrera = Carrera.id_carrera
+        INNER JOIN Encuesta ON Curso_has_Alumno.matricula = Encuesta.matricula_alumno
     WHERE 
-        Curso_has_Alumno.matricula = Mt 
+        Curso_has_Alumno.matricula = Mt
         AND Curso.id_periodo = (SELECT id_periodo FROM Periodo WHERE Estado = 1);
-END$$
+                                     
+     END$$
 
 CREATE DEFINER=`SistemaEval`@`localhost` PROCEDURE `getTeachersAverageByPeriod` (IN `idPeriod` INT(4))  BEGIN
 SELECT id_periodo, Grupo.clave_grupo,nombre_materia,nombre_carrera, Docente.nombre,Docente.apellido_materno, Docente.apellido_paterno ,AVG(Respuesta.puntuacion) AS promedio_puntuacion
@@ -313,7 +316,7 @@ CREATE TABLE `Materia` (
 
 CREATE TABLE `Periodo` (
   `id_periodo` int(11) NOT NULL,
-  `Estatus` int(11) DEFAULT NULL
+  `Estado` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
