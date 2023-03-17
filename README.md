@@ -6,8 +6,8 @@
 
       
 #### Este es el diagrama ER
+![er](https://user-images.githubusercontent.com/85807291/225389513-a99bf93e-e3a8-4b54-84dd-90fd4ce53a20.png)
 
-![er](https://user-images.githubusercontent.com/85807291/224757342-5fd2eac9-c1ea-4e52-9377-aa64b33beceb.png)
 
 
 #### <em> La base de datos contiene registros de prueba insertados </em>
@@ -91,5 +91,5 @@
 
 #### Guardar las respuestas
 
-   CALL   saveAnswer ({idEncuesta}, {idPregunta}, {idCuestionarioAd}, {valor})
+      CALL   saveAnswer ({idEncuesta}, {idPregunta}, {idCuestionarioAd}, {valor})
    
