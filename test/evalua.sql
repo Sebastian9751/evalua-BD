@@ -111,38 +111,33 @@ WHERE Grupo.id_grupo= idGroup;
 
 END$$
 
-CREATE DEFINER=`root`@`%` PROCEDURE `getTeacherByStudent` (IN `Mt` INT(9))   BEGIN
-    SELECT 
-    Curso.id_periodo, 
-    Curso.id_curso,
-    Encuesta.id_encuesta,
-    Encuesta.estatus,
-    Materia.id_materia, 
-    Materia.nombre_materia,
-    Grupo.clave_grupo, 
-    Materia.nombre_corto_materia, 
-    Docente.id_docente, 
-    Docente.nombre,
-    Docente.apellido_materno, 
-    Docente.apellido_paterno,
-    Carrera.nombre_carrera
-	FROM 
-		Curso_has_Alumno 
-		INNER JOIN Curso ON Curso_has_Alumno.id_curso = Curso.id_curso 
-		INNER JOIN Materia ON Curso.id_materia = Materia.id_materia
-		INNER JOIN Docente ON Curso.id_docente = Docente.id_docente
-		INNER JOIN Grupo ON Curso.id_grupo = Grupo.id_grupo
-		INNER JOIN Carrera ON Grupo.id_carrera = Carrera.id_carrera
-		INNER JOIN (
-			SELECT id_curso, MAX(id_encuesta) AS id_encuesta, estatus
-			FROM Encuesta 
-			GROUP BY id_curso, estatus
-		) AS LastEncuesta ON Curso.id_curso = LastEncuesta.id_curso
-		INNER JOIN Encuesta ON LastEncuesta.id_encuesta = Encuesta.id_encuesta
-	WHERE 
-		Curso_has_Alumno.matricula = MT
-		AND Curso.id_periodo = (SELECT id_periodo FROM Periodo WHERE Estado = 1);
-END$$
+CREATE DEFINER=`SistemaEval`@`localhost` PROCEDURE `getTeacherByStudent` (IN `Mt` INT(9))  BEGIN
+ SELECT 
+        Curso.id_periodo, 
+        Curso.id_curso, 
+        Materia.id_materia, 
+        Materia.nombre_materia,
+        Grupo.clave_grupo, 
+        Materia.nombre_corto_materia, 
+        Docente.id_docente, 
+        Docente.nombre,
+        Docente.apellido_materno, 
+        Docente.apellido_paterno,
+        Carrera.nombre_carrera, Encuesta.id_encuesta
+        
+    FROM 
+        Curso_has_Alumno 
+        INNER JOIN Curso ON Curso_has_Alumno.id_curso = Curso.id_curso 
+        INNER JOIN Materia ON Curso.id_materia = Materia.id_materia
+        INNER JOIN Docente ON Curso.id_docente = Docente.id_docente
+        INNER JOIN Grupo ON Curso.id_grupo = Grupo.id_grupo
+        INNER JOIN Carrera ON Grupo.id_carrera = Carrera.id_carrera
+        INNER JOIN Encuesta ON Curso_has_Alumno.matricula = Encuesta.matricula_alumno
+    WHERE 
+        Curso_has_Alumno.matricula = Mt
+        AND Curso.id_periodo = (SELECT id_periodo FROM Periodo WHERE Estado = 1);
+                                     
+     END$$
 
 CREATE DEFINER=`root`@`%` PROCEDURE `getTeachersAverageByPeriod` (IN `idPeriod` INT(4))   BEGIN
 SELECT id_periodo, Grupo.clave_grupo,nombre_materia,nombre_carrera, Docente.nombre,Docente.apellido_materno, Docente.apellido_paterno ,AVG(Respuesta.puntuacion) AS promedio_puntuacion
@@ -22266,16 +22261,9 @@ INSERT INTO `Materia` (`id_materia`, `nombre_materia`, `nombre_corto_materia`) V
 --
 
 CREATE TABLE `Periodo` (
-  `id_periodo` int NOT NULL,
-  `Estado` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Volcado de datos para la tabla `Periodo`
---
-
-INSERT INTO `Periodo` (`id_periodo`, `Estado`) VALUES
-(3231, 1);
+  `id_periodo` int(11) NOT NULL,
+  `Estado` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
