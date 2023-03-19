@@ -189,3 +189,14 @@ CREATE PROCEDURE `saveAnswer`(IN `idEncuesta` INT, IN `idPregunta` INT, IN `idCu
 BEGIN
     INSERT INTO Respuesta VALUES(idEncuesta, idPregunta, idCuestionarioAd, valor);
 END//
+
+# Comentario encuesta
+
+DELIMITER //
+CREATE PROCEDURE surveyCommentPost(IN idEncuesta int(10), IN comentario varchar(255)) 
+BEGIN
+    UPDATE Encuesta 
+    SET comentario = comentario, estatus =1
+	WHERE Encuesta.id_encuesta = idEncuesta;
+    
+END//
