@@ -6,7 +6,8 @@
 
       
 #### Este es el diagrama ER
-![er](https://user-images.githubusercontent.com/85807291/225389513-a99bf93e-e3a8-4b54-84dd-90fd4ce53a20.png)
+![er](https://user-images.githubusercontent.com/85807291/226157309-e77cf798-d5ba-4614-976a-6d1450493b6d.png)
+
 
 
 
@@ -93,9 +94,8 @@
 
       CALL   saveAnswer ({idEncuesta}, {idPregunta}, {idCuestionarioAd}, {valor})
    
-### Enviar comentario dela encuesta 
+#### Enviar comentario de la encuesta 
 
       Call   surveyCommentPost({id_encuesta},"comentario")
 
-###### Nota: el comenatio puede ser nullo, pero la consulta se debe ejecutar ya que actualiza 
-             el estado de la encuesta en automatico
+###### Nota: el comenatio puede ser nullo, pero la consulta se debe ejecutar ya que actualiza el estado de la encuesta en automatico
