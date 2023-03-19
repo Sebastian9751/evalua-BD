@@ -148,6 +148,7 @@ DELIMITER ;
 
 
 #Profesores por estudiante
+
 CREATE DEFINER=`root`@`%` PROCEDURE `getTeacherByStudent` (IN `Mt` INT(9))   BEGIN
     SELECT 
     Curso.id_periodo, 

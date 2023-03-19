@@ -1,6 +1,6 @@
 -- phpMyAdmin SQL Dump
 -- version 5.2.1
--- https://www.phpmyadmin.net/
+-- https://www.phpmyadmin.net
 --
 -- Servidor: containers-us-west-148.railway.app:6796
 -- Tiempo de generación: 19-03-2023 a las 05:57:21
