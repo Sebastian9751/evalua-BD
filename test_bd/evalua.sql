@@ -1,8 +1,9 @@
 -- phpMyAdmin SQL Dump
 -- version 5.2.1
+-- https://www.phpmyadmin.net/
 --
--- Servidor: containers-us-west-148.railway.app:6796
--- Tiempo de generación: 19-03-2023 a las 05:57:21
+-- Servidor: mysql
+-- Tiempo de generación: 23-03-2023 a las 04:59:30
 -- Versión del servidor: 8.0.32
 -- Versión de PHP: 8.1.16
 
@@ -17,14 +18,14 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `railway`
+-- Base de datos: `new_eva`
 --
 
 DELIMITER $$
 --
 -- Procedimientos
 --
-CREATE DEFINER=`root`@`%` PROCEDURE `getAverageByCareer` (IN `idCareer` INT(10))   BEGIN
+CREATE DEFINER=`root`@`%` PROCEDURE `getAverageByCareer` (IN `idCareer` INT(10), IN `per` INT(4))   BEGIN
 SELECT id_periodo, Grupo.clave_grupo,nombre_materia,nombre_carrera,nombre_corto, AVG(Respuesta.puntuacion) AS promedio_puntuacion
 FROM Encuesta 
 INNER JOIN Curso ON Encuesta.id_curso = Curso.id_curso 
@@ -34,14 +35,13 @@ INNER JOIN Materia ON Curso.id_materia = Materia.id_materia
 INNER JOIN Respuesta ON Encuesta.id_encuesta = Respuesta.id_encuesta  
 INNER JOIN Pregunta ON Respuesta.id_pregunta = Pregunta.id_pregunta
 
-WHERE Carrera.id_carrera=  idCareer
+WHERE Carrera.id_carrera=  idCareer AND id_periodo = per
 
 GROUP BY Grupo.clave_grupo, nombre_materia, nombre_carrera, nombre_corto, id_periodo;
 
 END$$
 
-CREATE DEFINER=`root`@`%` PROCEDURE `getAverageGroupByCarrer` (IN `idCareer` INT(10))   BEGIN
-
+CREATE DEFINER=`root`@`%` PROCEDURE `getAverageGroupByCarrer` (IN `idCareer` INT(10), IN `per` INT(4))   BEGIN
 SELECT  id_periodo, clave_grupo, nombre_carrera, AVG(Respuesta.puntuacion) AS promedio_puntuacion
 FROM Encuesta 
 INNER JOIN Curso ON Encuesta.id_curso = Curso.id_curso 
@@ -52,13 +52,13 @@ INNER JOIN Materia ON Curso.id_materia = Materia.id_materia
 INNER JOIN Respuesta ON Encuesta.id_encuesta = Respuesta.id_encuesta  
 INNER JOIN Pregunta ON Respuesta.id_pregunta = Pregunta.id_pregunta
 
-WHERE Carrera.id_carrera= idCareer
+WHERE Carrera.id_carrera= idCareer AND id_periodo =per 
 
 GROUP BY id_periodo,Grupo.clave_grupo, Carrera.nombre_carrera, id_periodo;
 
 END$$
 
-CREATE DEFINER=`root`@`%` PROCEDURE `getAverageQuestionByGroup` (IN `idGroup` INT(10))   BEGIN
+CREATE DEFINER=`root`@`%` PROCEDURE `getAverageQuestionByGroup` (IN `idGroup` INT(10), IN `per` INT(4))   BEGIN
 SELECT id_periodo, Pregunta.id_pregunta, Pregunta.pregunta, Pregunta.id_cuestionario_ad, Grupo.clave_grupo, AVG(Respuesta.puntuacion) AS promedio_puntuacion
 FROM Encuesta 
 INNER JOIN Curso ON Encuesta.id_curso = Curso.id_curso 
@@ -68,7 +68,7 @@ INNER JOIN Materia ON Curso.id_materia = Materia.id_materia
 INNER JOIN Respuesta ON Encuesta.id_encuesta = Respuesta.id_encuesta  
 INNER JOIN Pregunta ON Respuesta.id_pregunta = Pregunta.id_pregunta
 
-WHERE Grupo.id_grupo =  idGroup
+WHERE Grupo.id_grupo =  idGroup AND id_periodo = per
 
 GROUP BY  Pregunta.id_pregunta, Pregunta.pregunta, Pregunta.id_cuestionario_ad, Grupo.clave_grupo, id_periodo;
 
@@ -80,7 +80,7 @@ WHERE Pregunta.id_cuestionario_ad = (SELECT MAX(id_cuestionario_ad) FROM Pregunt
 
 END$$
 
-CREATE DEFINER=`root`@`%` PROCEDURE `getGroupsByTeacher` (IN `idDoc` INT(10), IN `idCarr` INT(10))   BEGIN
+CREATE DEFINER=`root`@`%` PROCEDURE `getGroupsByTeacher` (IN `idDoc` INT(10), IN `per` INT(4))   BEGIN
 
 SELECT Docente.id_docente, id_periodo, Grupo.clave_grupo,nombre_materia, Docente.nombre,Docente.apellido_materno, Docente.apellido_paterno, AVG(Respuesta.puntuacion) AS promedio_puntuacion
 FROM Encuesta 
@@ -92,7 +92,7 @@ INNER JOIN Materia ON Curso.id_materia = Materia.id_materia
 INNER JOIN Respuesta ON Encuesta.id_encuesta = Respuesta.id_encuesta  
 INNER JOIN Pregunta ON Respuesta.id_pregunta = Pregunta.id_pregunta
 
-WHERE Docente.id_docente = idDoc AND Carrera.id_carrera = idCarr 
+WHERE Docente.id_docente = idDoc AND id_periodo = per
 
 GROUP BY id_periodo,Grupo.clave_grupo, Docente.id_docente, nombre_materia, Docente.nombre, Docente.apellido_materno, Docente.apellido_paterno;
 
@@ -134,7 +134,7 @@ CREATE DEFINER=`root`@`%` PROCEDURE `getTeacherByStudent` (IN `Mt` INT(9))   BEG
 		INNER JOIN Carrera ON Grupo.id_carrera = Carrera.id_carrera
 		INNER JOIN (
 			SELECT id_curso, MAX(id_encuesta) AS id_encuesta, estatus
-			FROM Encuesta 
+			FROM Encuesta WHERE matricula_alumno = MT
 			GROUP BY id_curso, estatus
 		) AS LastEncuesta ON Curso.id_curso = LastEncuesta.id_curso
 		INNER JOIN Encuesta ON LastEncuesta.id_encuesta = Encuesta.id_encuesta
@@ -14114,13 +14114,13 @@ CREATE TABLE `Encuesta` (
 --
 
 INSERT INTO `Encuesta` (`id_encuesta`, `id_curso`, `matricula_alumno`, `id_cuestionario_ad`, `comentario`, `estatus`) VALUES
-(1, 8620, 202200086, 2, 'hola soy un comentario', 1),
-(2, 8620, 202200101, 2, NULL, 0),
+(1, 8620, 202200086, 2, 'hola', 1),
+(2, 8620, 202200101, 2, 'hola como tas hijo', 1),
 (3, 8620, 202200056, 2, NULL, 0),
 (4, 8620, 202200087, 2, NULL, 0),
 (5, 8620, 202200096, 2, NULL, 0),
 (6, 8620, 202200095, 2, NULL, 0),
-(7, 8620, 202200062, 2, 'hola soy un comentario', 1),
+(7, 8620, 202200062, 2, NULL, 0),
 (8, 8620, 202200054, 2, NULL, 0),
 (9, 8620, 202200084, 2, NULL, 0),
 (10, 8620, 202200059, 2, NULL, 0),
@@ -15568,9 +15568,9 @@ INSERT INTO `Encuesta` (`id_encuesta`, `id_curso`, `matricula_alumno`, `id_cuest
 (1452, 8672, 202200298, 2, NULL, 0),
 (1453, 8672, 202200365, 2, NULL, 0),
 (1454, 8672, 202200276, 2, NULL, 0),
-(1455, 8672, 202200312, 2, NULL, 0);
+(1455, 8672, 202200312, 2, NULL, 0),
+(1456, 8672, 202200332, 2, NULL, 0);
 INSERT INTO `Encuesta` (`id_encuesta`, `id_curso`, `matricula_alumno`, `id_cuestionario_ad`, `comentario`, `estatus`) VALUES
-(1456, 8672, 202200332, 2, NULL, 0),
 (1457, 8672, 202200318, 2, NULL, 0),
 (1458, 8672, 202200287, 2, NULL, 0),
 (1459, 8672, 202200370, 2, NULL, 0),
@@ -16994,9 +16994,9 @@ INSERT INTO `Encuesta` (`id_encuesta`, `id_curso`, `matricula_alumno`, `id_cuest
 (2877, 8731, 202100036, 2, NULL, 0),
 (2878, 8731, 202100005, 2, NULL, 0),
 (2879, 8731, 202100069, 2, NULL, 0),
-(2880, 8731, 202100033, 2, NULL, 0);
+(2880, 8731, 202100033, 2, NULL, 0),
+(2881, 8731, 201900007, 2, NULL, 0);
 INSERT INTO `Encuesta` (`id_encuesta`, `id_curso`, `matricula_alumno`, `id_cuestionario_ad`, `comentario`, `estatus`) VALUES
-(2881, 8731, 201900007, 2, NULL, 0),
 (2882, 8731, 202100026, 2, NULL, 0),
 (2883, 8731, 202100074, 2, NULL, 0),
 (2884, 8731, 202100008, 2, NULL, 0),
@@ -18420,9 +18420,9 @@ INSERT INTO `Encuesta` (`id_encuesta`, `id_curso`, `matricula_alumno`, `id_cuest
 (4302, 8779, 202100369, 2, NULL, 0),
 (4303, 8779, 202000208, 2, NULL, 0),
 (4304, 8779, 202100388, 2, NULL, 0),
-(4305, 8779, 202100315, 2, NULL, 0);
+(4305, 8779, 202100315, 2, NULL, 0),
+(4306, 8780, 202100352, 2, NULL, 0);
 INSERT INTO `Encuesta` (`id_encuesta`, `id_curso`, `matricula_alumno`, `id_cuestionario_ad`, `comentario`, `estatus`) VALUES
-(4306, 8780, 202100352, 2, NULL, 0),
 (4307, 8780, 202100327, 2, NULL, 0),
 (4308, 8780, 202100321, 2, NULL, 0),
 (4309, 8780, 202100254, 2, NULL, 0),
@@ -19846,9 +19846,9 @@ INSERT INTO `Encuesta` (`id_encuesta`, `id_curso`, `matricula_alumno`, `id_cuest
 (5727, 8831, 202200446, 2, NULL, 0),
 (5728, 8831, 202200458, 2, NULL, 0),
 (5729, 8831, 202200500, 2, NULL, 0),
-(5730, 8831, 202200445, 2, NULL, 0);
+(5730, 8831, 202200445, 2, NULL, 0),
+(5731, 8831, 202200533, 2, NULL, 0);
 INSERT INTO `Encuesta` (`id_encuesta`, `id_curso`, `matricula_alumno`, `id_cuestionario_ad`, `comentario`, `estatus`) VALUES
-(5731, 8831, 202200533, 2, NULL, 0),
 (5732, 8831, 202200483, 2, NULL, 0),
 (5733, 8831, 202200532, 2, NULL, 0),
 (5734, 8831, 202200482, 2, NULL, 0),
@@ -22282,6 +22282,7 @@ CREATE TABLE `Periodo` (
 --
 
 INSERT INTO `Periodo` (`id_periodo`, `Estado`) VALUES
+(3222, 0),
 (3231, 1);
 
 -- --------------------------------------------------------
@@ -22334,7 +22335,8 @@ INSERT INTO `Pregunta` (`id_pregunta`, `id_cuestionario_ad`, `pregunta`) VALUES
 (31, 2, 'Promueve el cuidado de las instalaciones: limpieza, orden y medio ambiente'),
 (32, 2, 'Respeta su horario de clase'),
 (33, 2, 'Llega puntual y asiste al menos al 90% de las sesiones'),
-(34, 2, '¿Cómo calificarías el desempeño de tu docente frente al grupo?');
+(34, 2, '¿Cómo calificarías el desempeño de tu docente frente al grupo?'),
+(35, 1, '¿El maestro realiza una evaluación diagnóstica al inicio del cuatrimestre?');
 
 -- --------------------------------------------------------
 
@@ -22479,13 +22481,13 @@ ALTER TABLE `Carrera`
 -- AUTO_INCREMENT de la tabla `Curso`
 --
 ALTER TABLE `Curso`
-  MODIFY `id_curso` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8897;
+  MODIFY `id_curso` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40001;
 
 --
 -- AUTO_INCREMENT de la tabla `Encuesta`
 --
 ALTER TABLE `Encuesta`
-  MODIFY `id_encuesta` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7009;
+  MODIFY `id_encuesta` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17001;
 
 --
 -- AUTO_INCREMENT de la tabla `Grupo`
@@ -22503,7 +22505,7 @@ ALTER TABLE `Materia`
 -- AUTO_INCREMENT de la tabla `Pregunta`
 --
 ALTER TABLE `Pregunta`
-  MODIFY `id_pregunta` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id_pregunta` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT de la tabla `tipo_docente`

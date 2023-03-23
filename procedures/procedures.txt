@@ -2,10 +2,9 @@
 
 
 DELIMITER $$
---
--- Procedimientos
---
-CREATE DEFINER=`root`@`%` PROCEDURE `getAverageByCareer` (IN `idCareer` INT(10))   BEGIN
+
+CREATE PROCEDURE `getAverageByCareer` (IN `idCareer` INT(10), IN per int(4))  
+BEGIN
 SELECT id_periodo, Grupo.clave_grupo,nombre_materia,nombre_carrera,nombre_corto, AVG(Respuesta.puntuacion) AS promedio_puntuacion
 FROM Encuesta 
 INNER JOIN Curso ON Encuesta.id_curso = Curso.id_curso 
@@ -15,7 +14,7 @@ INNER JOIN Materia ON Curso.id_materia = Materia.id_materia
 INNER JOIN Respuesta ON Encuesta.id_encuesta = Respuesta.id_encuesta  
 INNER JOIN Pregunta ON Respuesta.id_pregunta = Pregunta.id_pregunta
 
-WHERE Carrera.id_carrera=  idCareer
+WHERE Carrera.id_carrera=  idCareer AND id_periodo = per
 
 GROUP BY Grupo.clave_grupo, nombre_materia, nombre_carrera, nombre_corto, id_periodo;
 
@@ -57,7 +56,7 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE PROCEDURE  getGroupsByTeacher(IN idDoc int(10))
+CREATE PROCEDURE  getGroupsByTeacher(IN idDoc int(10), IN per int(4))
 
 BEGIN
 
@@ -71,7 +70,7 @@ INNER JOIN Materia ON Curso.id_materia = Materia.id_materia
 INNER JOIN Respuesta ON Encuesta.id_encuesta = Respuesta.id_encuesta  
 INNER JOIN Pregunta ON Respuesta.id_pregunta = Pregunta.id_pregunta
 
-WHERE Docente.id_docente = idDoc
+WHERE Docente.id_docente = idDoc AND id_periodo = per
 
 GROUP BY id_periodo,Grupo.clave_grupo, Docente.id_docente, nombre_materia, Docente.nombre, Docente.apellido_materno, Docente.apellido_paterno;
 
@@ -83,10 +82,9 @@ DELIMITER ;
 #Puntuacion individual de cada grupo por carrera
 
 DELIMITER //
-CREATE PROCEDURE  getAverageGroupByCarrer(IN idCareer int(10))
+CREATE PROCEDURE  getAverageGroupByCarrer(IN idCareer int(10), IN per int(4))
 
 BEGIN
-
 SELECT  id_periodo, clave_grupo, nombre_carrera, AVG(Respuesta.puntuacion) AS promedio_puntuacion
 FROM Encuesta 
 INNER JOIN Curso ON Encuesta.id_curso = Curso.id_curso 
@@ -97,7 +95,7 @@ INNER JOIN Materia ON Curso.id_materia = Materia.id_materia
 INNER JOIN Respuesta ON Encuesta.id_encuesta = Respuesta.id_encuesta  
 INNER JOIN Pregunta ON Respuesta.id_pregunta = Pregunta.id_pregunta
 
-WHERE Carrera.id_carrera= idCareer
+WHERE Carrera.id_carrera= idCareer AND id_periodo =per 
 
 GROUP BY id_periodo,Grupo.clave_grupo, Carrera.nombre_carrera, id_periodo;
 
@@ -108,7 +106,7 @@ DELIMITER ;
 #Promedio de pregunta por grupo 
 
 DELIMITER //
-CREATE PROCEDURE getAverageQuestionByGroup(IN idGroup int(10) )
+CREATE PROCEDURE getAverageQuestionByGroup(IN idGroup int(10), IN per int(4))
 BEGIN
 SELECT id_periodo, Pregunta.id_pregunta, Pregunta.pregunta, Pregunta.id_cuestionario_ad, Grupo.clave_grupo, AVG(Respuesta.puntuacion) AS promedio_puntuacion
 FROM Encuesta 
@@ -119,7 +117,7 @@ INNER JOIN Materia ON Curso.id_materia = Materia.id_materia
 INNER JOIN Respuesta ON Encuesta.id_encuesta = Respuesta.id_encuesta  
 INNER JOIN Pregunta ON Respuesta.id_pregunta = Pregunta.id_pregunta
 
-WHERE Grupo.id_grupo =  idGroup
+WHERE Grupo.id_grupo =  idGroup AND id_periodo = per
 
 GROUP BY  Pregunta.id_pregunta, Pregunta.pregunta, Pregunta.id_cuestionario_ad, Grupo.clave_grupo, id_periodo;
 
@@ -130,26 +128,15 @@ GROUP BY  Pregunta.id_pregunta, Pregunta.pregunta, Pregunta.id_cuestionario_ad, 
 
 #Estudiantes por grupo
 
-DELIMITER //
-CREATE PROCEDURE getStudentsByGroup(IN idGroup int(10))
-BEGIN
-SELECT id_periodo, nombre_carrera, clave_grupo, matricula_alumno, nombre, apellido_materno, apellido_paterno 
-FROM Encuesta 
-INNER JOIN Curso ON Encuesta.id_curso = Curso.id_curso 
-INNER JOIN Alumno ON Encuesta.matricula_alumno = Alumno.matricula
-INNER JOIN Grupo ON Curso.id_grupo = Grupo.id_grupo 
-INNER JOIN Carrera ON Grupo.id_carrera = Carrera.id_carrera
 
-WHERE Grupo.id_grupo= idGroup;
-
-END //
 
 DELIMITER ;
 
 
 #Profesores por estudiante
 
-CREATE DEFINER=`root`@`%` PROCEDURE `getTeacherByStudent` (IN `Mt` INT(9))   BEGIN
+getTeacherByStudent;
+BEGIN
     SELECT 
     Curso.id_periodo, 
     Curso.id_curso,
@@ -173,14 +160,14 @@ CREATE DEFINER=`root`@`%` PROCEDURE `getTeacherByStudent` (IN `Mt` INT(9))   BEG
 		INNER JOIN Carrera ON Grupo.id_carrera = Carrera.id_carrera
 		INNER JOIN (
 			SELECT id_curso, MAX(id_encuesta) AS id_encuesta, estatus
-			FROM Encuesta 
+			FROM Encuesta WHERE matricula_alumno = MT
 			GROUP BY id_curso, estatus
 		) AS LastEncuesta ON Curso.id_curso = LastEncuesta.id_curso
 		INNER JOIN Encuesta ON LastEncuesta.id_encuesta = Encuesta.id_encuesta
 	WHERE 
 		Curso_has_Alumno.matricula = MT
 		AND Curso.id_periodo = (SELECT id_periodo FROM Periodo WHERE Estado = 1);
-END$$
+END
 
 
 # Respuestas
