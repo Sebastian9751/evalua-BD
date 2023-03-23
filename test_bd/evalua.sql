@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: mysql
--- Tiempo de generación: 23-03-2023 a las 04:59:30
+-- Tiempo de generación: 23-03-2023 a las 19:40:20
 -- Versión del servidor: 8.0.32
 -- Versión de PHP: 8.1.16
 
@@ -98,15 +98,15 @@ GROUP BY id_periodo,Grupo.clave_grupo, Docente.id_docente, nombre_materia, Docen
 
 END$$
 
-CREATE DEFINER=`root`@`%` PROCEDURE `getStudentsByGroup` (IN `idGroup` INT(10))   BEGIN
-SELECT id_periodo, nombre_carrera, clave_grupo, matricula_alumno, nombre, apellido_materno, apellido_paterno 
+CREATE DEFINER=`root`@`%` PROCEDURE `getStudentsByGroup` (IN `Gp` INT(10), IN `per` INT(4))   BEGIN
+SELECT DISTINCT id_periodo, nombre_carrera, clave_grupo, matricula_alumno, nombre, apellido_materno, apellido_paterno 
 FROM Encuesta 
 INNER JOIN Curso ON Encuesta.id_curso = Curso.id_curso 
 INNER JOIN Alumno ON Encuesta.matricula_alumno = Alumno.matricula
 INNER JOIN Grupo ON Curso.id_grupo = Grupo.id_grupo 
 INNER JOIN Carrera ON Grupo.id_carrera = Carrera.id_carrera
 
-WHERE Grupo.id_grupo= idGroup;
+WHERE Grupo.id_grupo= Gp AND id_periodo= per;
 
 END$$
 
