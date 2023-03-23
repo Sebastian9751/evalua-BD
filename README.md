@@ -52,13 +52,7 @@
 
       CALL getTeacherByStudent({matricula} )      ->donde "matricula" es la del alumno 
       
-      Matriculas               
-    
-      - 202000109             
-      - 202000110                                     
-      - 202000111
-      - 202000114
-      - 202000115      
+         
 ###### Nota: la consulta puede devolver una query vacia, si solicitan datos que no existen 
 
 
