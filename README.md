@@ -46,7 +46,7 @@
 
 #### Lista de estudiantes por grupo
 
-      TODO
+      CALL getStudentsByGroup({id:grupo}, {id_periodo});
 
 #### Lista de profeso ,res por alumno (matricula)
 

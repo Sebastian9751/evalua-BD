@@ -128,6 +128,20 @@ GROUP BY  Pregunta.id_pregunta, Pregunta.pregunta, Pregunta.id_cuestionario_ad, 
 
 #Estudiantes por grupo
 
+DELIMITER //
+CREATE PROCEDURE getStudentsByGroup(IN Gp int(10), IN per int(4)) BEGIN
+SELECT DISTINCT id_periodo, nombre_carrera, clave_grupo, matricula_alumno, nombre, apellido_materno, apellido_paterno 
+FROM Encuesta 
+INNER JOIN Curso ON Encuesta.id_curso = Curso.id_curso 
+INNER JOIN Alumno ON Encuesta.matricula_alumno = Alumno.matricula
+INNER JOIN Grupo ON Curso.id_grupo = Grupo.id_grupo 
+INNER JOIN Carrera ON Grupo.id_carrera = Carrera.id_carrera
+
+WHERE Grupo.id_grupo= Gp AND id_periodo= per;
+
+END // 
+
+DELIMITER ;
 
 
 DELIMITER ;
