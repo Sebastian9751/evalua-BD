@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: mysql
--- Tiempo de generación: 23-03-2023 a las 19:40:20
+-- Tiempo de generación: 30-03-2023 a las 22:02:59
 -- Versión del servidor: 8.0.32
 -- Versión de PHP: 8.1.16
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `new_eva`
+-- Base de datos: `evvv`
 --
 
 DELIMITER $$
@@ -107,6 +107,39 @@ INNER JOIN Grupo ON Curso.id_grupo = Grupo.id_grupo
 INNER JOIN Carrera ON Grupo.id_carrera = Carrera.id_carrera
 
 WHERE Grupo.id_grupo= Gp AND id_periodo= per;
+
+END$$
+
+CREATE DEFINER=`root`@`%` PROCEDURE `getSurveyStats` ()   BEGIN
+
+CREATE TEMPORARY TABLE no_respondidas AS
+SELECT  DISTINCT matricula_alumno,  estatus  
+FROM Encuesta 
+INNER JOIN Curso ON Encuesta.id_curso = Curso.id_curso 
+WHERE  estatus=0 AND Curso.id_periodo= (SELECT id_periodo FROM Periodo WHERE Periodo.Estado = 1);
+
+
+CREATE TEMPORARY TABLE encuestas_respondidas AS
+SELECT  DISTINCT matricula_alumno,  estatus  
+FROM Encuesta 
+INNER JOIN Curso ON Encuesta.id_curso = Curso.id_curso 
+WHERE  estatus=1 AND Curso.id_periodo= (SELECT id_periodo FROM Periodo WHERE Periodo.Estado = 1);
+
+CREATE TEMPORARY TABLE total_encuestas AS
+SELECT  DISTINCT matricula_alumno,  estatus  
+FROM Encuesta 
+INNER JOIN Curso ON Encuesta.id_curso = Curso.id_curso 
+WHERE  Curso.id_periodo= (SELECT id_periodo FROM Periodo WHERE Periodo.Estado = 1);
+
+
+
+
+
+SELECT CONCAT(
+    		  'R = ',(SELECT COUNT(*)  AS respondidas FROM encuestas_respondidas),
+    		  '.  NA = ',(SELECT COUNT(*)AS no_respondidas FROM no_respondidas ),
+              ',  Total = ',(SELECT COUNT(*)AS total FROM total_encuestas) 
+             );
 
 END$$
 

@@ -69,4 +69,9 @@
 
       Call   surveyCommentPost({id_encuesta},"comentario")
 
-###### Nota: el comenatio puede ser nullo, pero la consulta se debe ejecutar ya que actualiza el estado de la encuesta en automatico
+###### Nota: el comentario puede ser nullo, pero la consulta se debe ejecutar ya que actualiza el estado de la encuesta en automatico
+
+#### Obtener el estado de las encuestas en general
+     CALL getSurveyStats();
+
+
