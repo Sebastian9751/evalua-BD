@@ -202,3 +202,42 @@ BEGIN
 	WHERE Encuesta.id_encuesta = idEncuesta;
     
 END//
+
+# Estado de encuestas
+
+DELIMITER // 
+
+CREATE PROCEDURE getSurveyStats()
+BEGIN
+
+CREATE TEMPORARY TABLE no_respondidas AS
+SELECT  DISTINCT matricula_alumno,  estatus  
+FROM Encuesta 
+INNER JOIN Curso ON Encuesta.id_curso = Curso.id_curso 
+WHERE  estatus=0 AND Curso.id_periodo= (SELECT id_periodo FROM Periodo WHERE Periodo.Estado = 1);
+
+
+CREATE TEMPORARY TABLE encuestas_respondidas AS
+SELECT  DISTINCT matricula_alumno,  estatus  
+FROM Encuesta 
+INNER JOIN Curso ON Encuesta.id_curso = Curso.id_curso 
+WHERE  estatus=1 AND Curso.id_periodo= (SELECT id_periodo FROM Periodo WHERE Periodo.Estado = 1);
+
+CREATE TEMPORARY TABLE total_encuestas AS
+SELECT  DISTINCT matricula_alumno,  estatus  
+FROM Encuesta 
+INNER JOIN Curso ON Encuesta.id_curso = Curso.id_curso 
+WHERE  Curso.id_periodo= (SELECT id_periodo FROM Periodo WHERE Periodo.Estado = 1);
+
+
+
+
+
+SELECT CONCAT(
+    		  'R = ',(SELECT COUNT(*)  AS respondidas FROM encuestas_respondidas),
+    		  '.  NA = ',(SELECT COUNT(*)AS no_respondidas FROM no_respondidas ),
+              ',  Total = ',(SELECT COUNT(*)AS total FROM total_encuestas) 
+             );
+
+END //
+DELIMITER ;
