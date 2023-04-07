@@ -34,21 +34,21 @@
      
 
 
-#### Obtener la puntuacion individual de cada grupo por carrera 
+##### Obtener la puntuacion individual de cada grupo por carrera 
 
       CALL getAverageGroupByCarrer({id}, {id_periodo})   -> donde el "id" es el de la carrera 
 
 
-#### Promedio de pregunta por grupo 
+##### Promedio de pregunta por grupo 
 
       CALL getAverageQuestionByGroup({id}, {id_perido})      -> donde el "id" es el del grupo
       
 
-#### Lista de estudiantes por grupo
+##### Lista de estudiantes por grupo
 
       CALL getStudentsByGroup({id:grupo}, {id_periodo});
 
-#### Lista de profeso ,res por alumno (matricula)
+##### Lista de profeso ,res por alumno (matricula)
 
       CALL getTeacherByStudent({matricula} )      ->donde "matricula" es la del alumno 
       
@@ -56,22 +56,22 @@
 ###### Nota: la consulta puede devolver una query vacia, si solicitan datos que no existen 
 
 
-#### Preguntas del cuestionario actual
+##### Preguntas del cuestionario actual
 
       CALL getCurrentQuestions()
 
 
-#### Guardar las respuestas
+##### Guardar las respuestas
 
       CALL   saveAnswer ({idEncuesta}, {idPregunta}, {idCuestionarioAd}, {valor})
    
-#### Enviar comentario de la encuesta 
+##### Enviar comentario de la encuesta 
 
       Call   surveyCommentPost({id_encuesta},"comentario")
 
 ###### Nota: el comentario puede ser nullo, pero la consulta se debe ejecutar ya que actualiza el estado de la encuesta en automatico
 
-#### Obtener el estado de las encuestas en general
+##### Obtener el estado de las encuestas en general
      CALL getSurveyStats();
 
 
