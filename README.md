@@ -16,10 +16,6 @@
 
       CALL getAverageByCareer({id}, {id_periodo})       -> donde el "id" es el de la carrera 
 
-       1 = Software
-       2 = Biomedica
-       3 = Biotecnologia
-
     
 
 ##### Obtener la lista de profesores por periodo
@@ -73,5 +69,9 @@
 
 ##### Obtener el estado de las encuestas en general
      CALL getSurveyStats();
+
+##### Obtener informacion general de la carrera
+      CALL  getGenInfo({id_carrera});
+
 
 

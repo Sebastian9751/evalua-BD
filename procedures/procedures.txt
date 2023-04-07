@@ -241,3 +241,34 @@ SELECT CONCAT(
 
 END //
 DELIMITER ;
+
+# Informacion general 
+
+DELIMITER //
+
+CREATE PROCEDURE getGenInfo(IN idMat int(10)) 
+BEGIN
+
+
+SET @per = (SELECT COUNT(*) From Periodo);
+
+SET @docentes = (SELECT COUNT(DISTINCT Docente.id_docente, Grupo.id_carrera) AS num_registros
+FROM Curso 
+INNER JOIN Grupo ON Curso.id_grupo = Grupo.id_grupo
+INNER JOIN Docente ON Curso.id_docente = Docente.id_docente
+WHERE Grupo.id_carrera = idMat);
+
+
+
+SET @mat = (SELECT COUNT(DISTINCT Materia.id_materia, Grupo.id_carrera) AS num_registros
+FROM Curso 
+INNER JOIN Grupo ON Curso.id_grupo = Grupo.id_grupo
+INNER JOIN Materia ON Curso.id_docente = Materia.id_materia
+WHERE Grupo.id_carrera = idMat);
+
+SELECT CONCAT('Periodos = ',@per ,'  Docentes = ',@docentes,'  Materias = ',@mat) AS info_gral;
+
+END //
+
+DELIMITER ; 
+
