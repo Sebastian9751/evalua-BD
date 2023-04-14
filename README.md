@@ -40,9 +40,9 @@
       CALL getAverageQuestionByGroup({id}, {id_perido})      -> donde el "id" es el del grupo
       
 
-##### Lista de estudiantes por grupo
+##### Lista de estudiantes por que no han respondido la encuesta, por grupo
 
-      CALL getStudentsByGroup({id:grupo}, {id_periodo});
+      CALL getStudentsByGroup({id_grupo}, {id_periodo});
 
 ##### Lista de profeso ,res por alumno (matricula)
 
