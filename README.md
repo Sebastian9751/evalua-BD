@@ -72,6 +72,9 @@
 
 ##### Obtener informacion general de la carrera
       CALL  getGenInfo({id_carrera});
+      
+##### Diccionario de datos
+      https://upqrooedumx-my.sharepoint.com/:x:/g/personal/202000088_upqroo_edu_mx/EToKGm1MdOxKgo4qjm7eoqsBMklFEGd-YCiGB_mpqUtIqg?rtime=E95zl9VB20g
 
 
 
