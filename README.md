@@ -6,7 +6,7 @@
 
       
 #### Este es el diagrama ER
-![er](https://user-images.githubusercontent.com/85807291/226157309-e77cf798-d5ba-4614-976a-6d1450493b6d.png)
+![image](https://user-images.githubusercontent.com/85807291/233235383-31dd74a3-7343-4b41-a7e1-9a4e62c1d690.png)
 
 
 
